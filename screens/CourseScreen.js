@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useState} from 'react';
 import {View} from 'react-native'
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -54,6 +54,10 @@ const columns = [
     { id: 6, studentName: 'Student 6', a1: 75, a2: 85, a3: 85, a4: 76 },
   ];
 
+  const keys = ["a1","a2","a3","a4"];
+
+  const rowWeight = [.1, .1, .1, .7];
+
 const useStyles = makeStyles({
     root: {
       flexGrow: 1,
@@ -84,14 +88,21 @@ const useStyles = makeStyles({
 
 const CourseScreen = ({route,navigation}) => {
 
-
     const classes = useStyles();
+
+    const getScore = (info, weights, keys, studentIDX) => {
+      let to_return = 0;
+      keys.map((item, idx) => {
+        to_return += info[studentIDX][item] * weights[idx]
+      })
+      return to_return;
+    }
 
     return (
         <Grid className={classes.root} container direction="row"
         justify="center"
         alignItems="top">
-            <RankCard score={88} type={'Personal'}/>
+            <RankCard score={getScore(rows, rowWeight, keys, 0)} type={'Personal'}/>
             <RankCard score={90} type={'Class'}/>
             <div style={{ height: '450', width: '100%' }}>
             <DataGrid rows={rows} columns={columns} pageSize={6} checkboxSelection  />
