@@ -15,7 +15,7 @@ import { Chart, VerticalAxis, HorizontalAxis, Line, Area } from 'react-native-re
 const ClassChart = () => {
     return (
         <Chart
-        style={{ height: 200, width: 400 }}
+        style={{ height: 250, width: 400 }}
         // data={[
         //     { x: -2, y: 15 },
         //     { x: -1, y: 10 },
@@ -46,7 +46,7 @@ const ClassChart = () => {
                 { x: 3, y: 85 },
                 { x: 4, y: 70 }
             ]} />
-        <Line theme={{ stroke: { color: '#40a992', width: 5 }, scatter: { default: { width: 8, height: 8, rx: 4, color: '#40a992' }, selected: { color: 'red' } } }}  data={
+        <Line theme={{ stroke: { color: '#40a992', width: 2 }, scatter: { default: { width: 8, height: 8, rx: 4, color: '#40a992' }, selected: { color: 'red' } } }}  data={
             [
                 // a1: 100, a2: 100, a3: 100, a4: 88 
                 { x: 1, y: 100 },
@@ -55,7 +55,7 @@ const ClassChart = () => {
                 { x: 4, y: 88 }
             ]
         }/>
-        <Line theme={{ stroke: { color: '#40a992', width: 5 }, scatter: { default: { width: 8, height: 8, rx: 4, color: '#40a992' }, selected: { color: 'red' } } }}  data={
+        <Line theme={{ stroke: { color: '#40a992', width: 2 }, scatter: { default: { width: 8, height: 8, rx: 4, color: '#40a992' }, selected: { color: 'red' } } }}  data={
             [
                 // a1: 95, a2: 85, a3: 95, a4: 90
                 { x: 1, y: 95 },
@@ -64,7 +64,7 @@ const ClassChart = () => {
                 { x: 4, y: 90 }
             ]
         }/>
-        <Line theme={{ stroke: { color: '#40a992', width: 5 }, scatter: { default: { width: 8, height: 8, rx: 4, color: '#40a992' }, selected: { color: 'red' } } }}  data={
+        <Line theme={{ stroke: { color: '#40a992', width: 2 }, scatter: { default: { width: 8, height: 8, rx: 4, color: '#40a992' }, selected: { color: 'red' } } }}  data={
             [
                 // a1: 65, a2: 75, a3: 95, a4: 72
                 // a1: 75, a2: 75, a3: 75, a4: 62 
