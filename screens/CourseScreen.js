@@ -10,6 +10,7 @@ import RankCard from '../components/RankCard';
 import AssignmentCard from '../components/AssignmentCard'
 import Table from '@material-ui/core/Table'
 import { DataGrid } from '@material-ui/data-grid'
+import ClassChart from '../components/ClassChart'
 
 const columns = [
     { field: 'id', headerName: 'ID', width: 70 },
@@ -104,9 +105,13 @@ const CourseScreen = ({route,navigation}) => {
         alignItems="top">
             <RankCard score={getScore(rows, rowWeight, keys, 0)} type={'Personal'}/>
             <RankCard score={90} type={'Class'}/>
-            <div style={{ height: '450', width: '100%' }}>
+            <View style={{width: '100%', alignItems: 'center'}}>
+              <Typography>Class Performance</Typography>
+              <ClassChart data={'hi'}/>
+            </View>
+            <View style={{ height: '450', width: '100%' }}>
             <DataGrid rows={rows} columns={columns} pageSize={6} checkboxSelection  />
-            </div>
+            </View>
         </Grid>
     );
 }
