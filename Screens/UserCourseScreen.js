@@ -12,6 +12,7 @@ import Table from '@material-ui/core/Table'
 import { DataGrid } from '@material-ui/data-grid'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button';
+import ClassSelect from '../components/ClassSelect'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -35,11 +36,7 @@ const UserCourseScreen = ({route, navigation}) => {
         justify="center"
         alignItems="center"
         spacing={2}>
-            <Grid item xs={12}>
-                <Button variant="contained" color="primary" onClick={() =>  navigation.navigate('CourseScreen')}>
-                    CS 213
-                </Button>
-            </Grid>
+            <ClassSelect courseList={[{id:"1234",course:'CS 213'}]} />
         </Grid>
 
     );
