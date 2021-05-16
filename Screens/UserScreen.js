@@ -44,6 +44,7 @@ const UserScreen = ({route, navigation}) => {
             Token: tokenEncrypt
         });
         navigation.navigate('UserCourseScreen')
+        // fetch courses api and 
         
     }
 

@@ -6,7 +6,7 @@ import Grid from '@material-ui/core/Grid'
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography'
-import RankCard from '../components/RankCard';
+import RankCard from './RankCard';
 import AssignmentCard from '../components/AssignmentCard'
 import Table from '@material-ui/core/Table'
 import { Chart, VerticalAxis, HorizontalAxis, Line, Area } from 'react-native-responsive-linechart'
@@ -28,12 +28,6 @@ const ClassSelect = ({courseList}) => {
     const [course, setCourse] = React.useState('');
     const classes = useStyles();
 
-    {courseList.map((item,idx) => {
-          
-        console.log(item.course)
-
-    })}
-
     const handleChange = (event) => {
         setCourse(event.target.value);
       };
@@ -47,7 +41,7 @@ const ClassSelect = ({courseList}) => {
         
         {courseList.map((item,idx) => (
           
-            <MenuItem value = {item.id} key = {item.course}> {item.course} </MenuItem>
+            <MenuItem value = {item.id} key = {item.name}> {item.name} </MenuItem>
 
         ))}
         

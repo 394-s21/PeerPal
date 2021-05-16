@@ -13,6 +13,8 @@ import { DataGrid } from '@material-ui/data-grid'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button';
 import ClassSelect from '../components/ClassSelect'
+import mockcourses from '../mockcourses.json'
+import ClassAccess from '../components/ClassAccess'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -30,13 +32,20 @@ const useStyles = makeStyles((theme) => ({
 
 const UserCourseScreen = ({route, navigation}) => {
     
+    // use backend api to fetch user_id and courses json
+
+    // const [courseList, setcourseList] = useState([])
+    // setcourseList(mockcourses.courses)
+    const courseList = mockcourses.courses
+
     return(
         <Grid container
         direction="column"
         justify="center"
         alignItems="center"
         spacing={2}>
-            <ClassSelect courseList={[{id:"1234",course:'CS 213'}]} />
+            <ClassAccess courseList={courseList}/>
+            <ClassSelect courseList={courseList} />
         </Grid>
 
     );

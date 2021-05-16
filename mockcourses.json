@@ -1,0 +1,14 @@
+{
+    "user_id": 142002,
+    "courses": [
+
+        {"id": 103342,
+        "name": "2019FA_CHEM_151-0_SEC01_AND_SEC02"},
+
+        {"id": 137178,
+        "name": "2021SP_COMP_SCI_213-0_SEC20 Introduction to Computer Systems"},
+
+        {"id": 102923,
+        "name": "2019FA_GEN_ENG_205-1_SEC20_AND_SEC21"}
+    ]
+}
