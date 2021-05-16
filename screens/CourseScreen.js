@@ -10,6 +10,7 @@ import RankCard from '../components/RankCard';
 import AssignmentCard from '../components/AssignmentCard'
 import Table from '@material-ui/core/Table'
 import { DataGrid } from '@material-ui/data-grid'
+import Button from '@material-ui/core/Button';
 
 const columns = [
     { field: 'id', headerName: 'ID', width: 70 },
@@ -107,6 +108,11 @@ const CourseScreen = ({route,navigation}) => {
             <div style={{ height: '450', width: '100%' }}>
             <DataGrid rows={rows} columns={columns} pageSize={6} checkboxSelection  />
             </div>
+            <Grid item xs={12}>
+              <Button variant="contained" color="primary" size="medium" onClick={() =>  navigation.navigate('UserCourseScreen')}>
+                      Back
+              </Button>
+            </Grid>
         </Grid>
     );
 }
