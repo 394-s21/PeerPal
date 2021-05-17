@@ -18,6 +18,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Checkbox from '@material-ui/core/Checkbox';
+import SaveIcon from '@material-ui/icons/Save'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -28,8 +29,22 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-
-
+const CheckboxEx = ({id}) => {
+    const [checked, setChecked] = useState(false)
+    const handleChange = (e) => {
+        setChecked(e.target.checked)
+    }
+    return(
+        <Checkbox
+            checked={checked}
+            checkedIcon={<SaveIcon/>}
+            onChange = {handleChange}
+            inputProps={{
+                'aria-label': 'secondary checkbox'
+            }}
+        />
+    )
+}
 
 const ClassAccess = ({courseList}) => {
     const classes = useStyles();
@@ -42,20 +57,22 @@ const ClassAccess = ({courseList}) => {
     //         item.id: false,
     //     )}
     // )
-    
     return(
         <FormControl component="fieldset" className={classes.formControl}>
-            <FormLabel component="legend">Grant Access Test</FormLabel>
+            <FormLabel component="legend">Grant Access</FormLabel>
         <FormGroup>
+        
             {courseList.map((item,idx) => (
-            <FormControlLabel 
-                control={<Checkbox checked={item.id}/>}    
-                label={item.name} />))}
+            <FormControlLabel
+                control={<CheckboxEx>item.id</CheckboxEx>}    
+                label={item.name}
+                key={item.id}
+            />))}
         </FormGroup>
-        <FormHelperText>Be careful</FormHelperText>
+        <FormHelperText>Select classes to share with PeerPal</FormHelperText>
       </FormControl>
 
-        )
+    )
 }
 
 
