@@ -45,7 +45,7 @@ const UserCourseScreen = ({route, navigation}) => {
         alignItems="center"
         spacing={2}>
             <ClassAccess courseList={courseList}/>
-            <ClassSelect courseList={courseList} />
+            <ClassSelect courseList={courseList} navigation={navigation}/>
         </Grid>
 
     );

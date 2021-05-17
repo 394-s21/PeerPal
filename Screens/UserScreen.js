@@ -91,7 +91,7 @@ const UserScreen = ({route, navigation}) => {
 
             <Grid item xs={12}>
                 <Button variant="contained" color="primary" onClick={() =>  signup()}>
-                    SIGN UP
+                    Sign Up
                 </Button>
             </Grid>
         </Grid>

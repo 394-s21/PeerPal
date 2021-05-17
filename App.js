@@ -20,9 +20,9 @@ export default function App() {
     <NavigationContainer>
     {/* Hide navigator header */}
     <Stack.Navigator screenOptions={{headerShown: false}}> 
-      {/* <Stack.Screen name="UserScreen"
+      <Stack.Screen name="UserScreen"
         component={UserScreen}
-      /> */}
+      />
       <Stack.Screen name="UserCourseScreen"
         component={UserCourseScreen}
       />
