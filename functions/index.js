@@ -1,4 +1,6 @@
 // The Cloud Functions for Firebase SDK to create Cloud Functions and setup triggers.
+
+const fetch = require('node-fetch')
 const functions = require('firebase-functions');
 
 // The Firebase Admin SDK to access Firestore.
@@ -21,5 +23,7 @@ exports.getClasses = functions.https.onRequest((req, res) => {
         }
     })
     .then(res => res.json())
+
+    //this is not a function have to import library
     .then(res => res.send(res));
 })
