@@ -38,18 +38,26 @@ const getUserClasses = async(token) => {
     })
     const result_json = await res.json();
     console.log(result_json)
-  
+    return (result_json)
+    
 }
 
 const UserCourseScreen = ({route, navigation}) => {
-    getUserClasses('1876~6TIbmwUY1SkTgGMOSO377QdPMOmsyvMZsqacTeosED9nY7o36B7hP0mYFnbTwPBI')
+    const user_class_json= getUserClasses('1876~6TIbmwUY1SkTgGMOSO377QdPMOmsyvMZsqacTeosED9nY7o36B7hP0mYFnbTwPBI')
+    let courseList = []
+    
+    for (let i=0; i<user_class_json.length; i++) {
+      courseList.push({id: user_class_json[i].id, course: user_class_json[i].name})
+    }
+    
+    console.log(courseList)
     return(
         <Grid container
         direction="column"
         justify="center"
         alignItems="center"
         spacing={2}>
-            <ClassSelect courseList={[{id:"1234",course:'CS 213'}]} />
+            <ClassSelect courseList={courseList} />
         </Grid>
 
     );
