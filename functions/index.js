@@ -28,10 +28,11 @@ exports.getClasses = functions.https.onRequest(async (req, res) => {
             authorization: `Bearer ${key}`
         }
     })
-    const unixTimeZero = Date.parse("2021-06-26T05:00:00Z");
     const result_json = await result.json();
+    //need to filter out the current classes
     const currentClasses = result_json.filter(i => {
-        i.end_at == unixTimeZero
+        // console.log(i.end_at)
+        return i.end_at === "2021-06-26T05:00:00Z"
     })
     // console.log(currentClasses)
     // const user_id = result_json[0].enrollments[0].user_id;
