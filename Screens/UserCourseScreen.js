@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View} from 'react-native'
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -13,6 +13,7 @@ import { DataGrid } from '@material-ui/data-grid'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button';
 import ClassSelect from '../components/ClassSelect'
+import useFetch from '../components/useFetch';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -30,7 +31,6 @@ const useStyles = makeStyles((theme) => ({
 
 
 const getUserClasses = async(token) => {
-
     const res = await fetch('http://localhost:5001/peerpal-a286b/us-central1/getClasses', {
             headers: {
             authorization: `Bearer ${token}`
@@ -38,26 +38,32 @@ const getUserClasses = async(token) => {
     })
     const result_json = await res.json();
     console.log(result_json)
-    return (result_json)
-    
+    let courseList = []
+    for (let i=0; i< result_json.length; i++) {
+      courseList.push({id: result_json[i].id, course: result_json[i].name})
+      // console.log(result_json[i])
+    }
+    console.log(courseList)
+    return (courseList)
 }
 
 const UserCourseScreen = ({route, navigation}) => {
-    const user_class_json= getUserClasses('1876~6TIbmwUY1SkTgGMOSO377QdPMOmsyvMZsqacTeosED9nY7o36B7hP0mYFnbTwPBI')
-    let courseList = []
-    
-    for (let i=0; i<user_class_json.length; i++) {
-      courseList.push({id: user_class_json[i].id, course: user_class_json[i].name})
-    }
-    
-    console.log(courseList)
+    // const user_class_json= getUserClasses('1876~6TIbmwUY1SkTgGMOSO377QdPMOmsyvMZsqacTeosED9nY7o36B7hP0mYFnbTwPBI')
+    // let courseList = []
+    // for (let i=0; i<user_class_json.length; i++) {
+    //   courseList.push({id: user_class_json[i].id, course: user_class_json[i].name})
+    //   console.log(user_class_json[i])
+    // }
+    // This is Alan here trying to see if I can create a custom hook in the compoenents folder
+    const {courseList, isPending, error} = useFetch('http://localhost:5001/peerpal-a286b/us-central1/getClasses', '1876~6TIbmwUY1SkTgGMOSO377QdPMOmsyvMZsqacTeosED9nY7o36B7hP0mYFnbTwPBI')
     return(
         <Grid container
         direction="column"
         justify="center"
         alignItems="center"
         spacing={2}>
-            <ClassSelect courseList={courseList} />
+            {/* {courseList ? <ClassSelect courseList={courseList} /> : <div>Loading . . .</div>} */}
+            {isPending && <ClassSelect courseList={courseList} />}
         </Grid>
 
     );
