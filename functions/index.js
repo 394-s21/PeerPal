@@ -44,5 +44,13 @@ exports.getClasses = functions.https.onRequest(async (req, res) => {
     // const classes_result_json = await classes_result.json();
     // console.log(classes_result_json)
 
+    // TODO
+    // Call updateGrades on classes (if we want to update every class)
+
     res.send(currentClasses);
 })
+
+
+// exports.updateGrades = functions.https.onRequest(async (req, res) => {
+
+// })
