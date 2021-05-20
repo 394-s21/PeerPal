@@ -28,8 +28,21 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
+
+const getUserClasses = async(token) => {
+
+    const res = await fetch('http://localhost:5001/peerpal-a286b/us-central1/getClasses', {
+            headers: {
+            authorization: `Bearer ${token}`
+        }
+    })
+    const result_json = await res.json();
+    console.log(result_json)
+  
+}
+
 const UserCourseScreen = ({route, navigation}) => {
-    
+    getUserClasses('1876~6TIbmwUY1SkTgGMOSO377QdPMOmsyvMZsqacTeosED9nY7o36B7hP0mYFnbTwPBI')
     return(
         <Grid container
         direction="column"
