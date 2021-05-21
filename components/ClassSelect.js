@@ -30,7 +30,7 @@ const ClassSelect = ({courseList}) => {
 
     {courseList.map((item,idx) => {
           
-        console.log(item.course)
+        console.log(item.name)
 
     })}
 

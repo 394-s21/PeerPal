@@ -37,13 +37,11 @@ const getUserClasses = async(token) => {
         }
     })
     const result_json = await res.json();
-    console.log(result_json)
     let courseList = []
     for (let i=0; i< result_json.length; i++) {
       courseList.push({id: result_json[i].id, course: result_json[i].name})
       // console.log(result_json[i])
     }
-    console.log(courseList)
     return (courseList)
 }
 
@@ -55,7 +53,12 @@ const UserCourseScreen = ({route, navigation}) => {
     //   console.log(user_class_json[i])
     // }
     // This is Alan here trying to see if I can create a custom hook in the compoenents folder
-    const {courseList, isPending, error} = useFetch('http://localhost:5001/peerpal-a286b/us-central1/getClasses', '1876~6TIbmwUY1SkTgGMOSO377QdPMOmsyvMZsqacTeosED9nY7o36B7hP0mYFnbTwPBI')
+    
+    //const {courseList, isPending, error} = useFetch('http://localhost:5001/peerpal-a286b/us-central1/getClasses', '1876~6TIbmwUY1SkTgGMOSO377QdPMOmsyvMZsqacTeosED9nY7o36B7hP0mYFnbTwPBI')
+    const [courseList, setCourseList] = useState([])
+    
+    getUserClasses('1876~6TIbmwUY1SkTgGMOSO377QdPMOmsyvMZsqacTeosED9nY7o36B7hP0mYFnbTwPBI')
+    console.log(courseList)
     return(
         <Grid container
         direction="column"
@@ -63,7 +66,7 @@ const UserCourseScreen = ({route, navigation}) => {
         alignItems="center"
         spacing={2}>
             {/* {courseList ? <ClassSelect courseList={courseList} /> : <div>Loading . . .</div>} */}
-            {isPending && <ClassSelect courseList={courseList} />}
+            <ClassSelect courseList={courseList} />
         </Grid>
 
     );
