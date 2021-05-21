@@ -29,25 +29,6 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-const getUserClasses = (token) => {
-  useEffect((token) => {
-    const fetchClasses = async(token) => {
-        const res = await fetch('http://localhost:5001/peerpal-a286b/us-central1/getClasses', {
-            headers: {
-            authorization: `Bearer ${token}`
-            }})
-        if (!res.ok) throw res;
-        const result_json = await res.json();
-        let courseList = []
-        for (let i=0; i< result_json.length; i++) {
-            courseList.push({id: result_json[i].id, course: result_json[i].name})
-            // console.log(result_json[i])
-            }
-        setCourseList(courseList)}
-        fetchClasses
-    }, [])
-}
-
 async function asyncCall() {
     console.log('calling');
     const result = new Promise(resolve => {
@@ -72,7 +53,25 @@ const UserCourseScreen = ({route, navigation}) => {
     // This is Alan here trying to see if I can create a custom hook in the compoenents folder
     const [courseList, setCourseList] = useState([]);
     
-    getUserClasses('http://localhost:5001/peerpal-a286b/us-central1/getClasses', '1876~6TIbmwUY1SkTgGMOSO377QdPMOmsyvMZsqacTeosED9nY7o36B7hP0mYFnbTwPBI')
+    const token = '1876~6TIbmwUY1SkTgGMOSO377QdPMOmsyvMZsqacTeosED9nY7o36B7hP0mYFnbTwPBI'
+
+    useEffect(() => {
+        const fetchClasses = async() => {
+            const res = await fetch('http://localhost:5001/peerpal-a286b/us-central1/getClasses', {
+                headers: {
+                authorization: `Bearer ${token}`
+                }})
+            if (!res.ok) throw res;
+            const result_json = await res.json();
+            let courseArray = []
+            for (let i=0; i< result_json.length; i++) {
+                courseArray.push({id: result_json[i].id, course: result_json[i].name})
+                // console.log(result_json[i])
+                }
+            setCourseList(courseArray)
+        }
+        fetchClasses()
+        }, [])
     
     // [courseList, setCourseList] = useState([])
     // getUserClasses('1876~6TIbmwUY1SkTgGMOSO377QdPMOmsyvMZsqacTeosED9nY7o36B7hP0mYFnbTwPBI')
@@ -84,7 +83,7 @@ const UserCourseScreen = ({route, navigation}) => {
         alignItems="center"
         spacing={2}>
             {/* {courseList ? <ClassSelect courseList={courseList} /> : <div>Loading . . .</div>} */}
-            {courseList.length != 0 && <ClassSelect courseList={courseList}/> || console.log(courseList)}
+            <ClassSelect courseList={courseList}/>
         </Grid>
 
     );
