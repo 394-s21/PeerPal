@@ -11,11 +11,29 @@ import AssignmentCard from '../components/AssignmentCard'
 import Table from '@material-ui/core/Table'
 import { Chart, VerticalAxis, HorizontalAxis, Line, Area } from 'react-native-responsive-linechart'
 import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 
 
-const ClassSelect = (courseList) => {
+const useStyles = makeStyles((theme) => ({
+    formControl: {
+      margin: theme.spacing(1),
+      minWidth: 120,
+    },
+    selectEmpty: {
+      marginTop: theme.spacing(2),
+    },
+  }));
 
+const ClassSelect = ({courseList}) => {
     const [course, setCourse] = React.useState('');
+    const classes = useStyles();
+
+    {courseList.map((item,idx) => {
+          
+        console.log(item.name)
+
+    })}
+
     const handleChange = (event) => {
         setCourse(event.target.value);
       };
@@ -27,11 +45,11 @@ const ClassSelect = (courseList) => {
         value={course}
         onChange={handleChange}>
         
-        {courseList.map((item,idx) => {
-            
-            <MenuItem value = {item.id}> item.course </MenuItem>
+        {courseList.map((item,idx) => (
+          
+            <MenuItem value = {item.id} key = {item.course}> {item.course} </MenuItem>
 
-        })}
+        ))}
         
 
 

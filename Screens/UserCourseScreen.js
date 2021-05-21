@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View} from 'react-native'
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -12,6 +12,8 @@ import Table from '@material-ui/core/Table'
 import { DataGrid } from '@material-ui/data-grid'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button';
+import ClassSelect from '../components/ClassSelect'
+import useFetch from '../components/useFetch';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -27,19 +29,61 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
+async function asyncCall() {
+    console.log('calling');
+    const result = new Promise(resolve => {
+      setTimeout(function(){ console.log('hello world'); }, 3000);
+    });
+    result.then((value)=>{
+      console.log("called")
+      asyncCall();
+    })
+    .catch((err)=>console.log(err))
+    // console.log(result);
+    // expected output: "resolved"
+  }
+
 const UserCourseScreen = ({route, navigation}) => {
+    // const user_class_json= getUserClasses('1876~6TIbmwUY1SkTgGMOSO377QdPMOmsyvMZsqacTeosED9nY7o36B7hP0mYFnbTwPBI')
+    // let courseList = []
+    // for (let i=0; i<user_class_json.length; i++) {
+    //   courseList.push({id: user_class_json[i].id, course: user_class_json[i].name})
+    //   console.log(user_class_json[i])
+    // }
+    // This is Alan here trying to see if I can create a custom hook in the compoenents folder
+    const [courseList, setCourseList] = useState([]);
     
+    const token = '1876~6TIbmwUY1SkTgGMOSO377QdPMOmsyvMZsqacTeosED9nY7o36B7hP0mYFnbTwPBI'
+
+    useEffect(() => {
+        const fetchClasses = async() => {
+            const res = await fetch('http://localhost:5001/peerpal-a286b/us-central1/getClasses', {
+                headers: {
+                authorization: `Bearer ${token}`
+                }})
+            if (!res.ok) throw res;
+            const result_json = await res.json();
+            let courseArray = []
+            for (let i=0; i< result_json.length; i++) {
+                courseArray.push({id: result_json[i].id, course: result_json[i].name})
+                // console.log(result_json[i])
+                }
+            setCourseList(courseArray)
+        }
+        fetchClasses()
+        }, [])
+    
+    // [courseList, setCourseList] = useState([])
+    // getUserClasses('1876~6TIbmwUY1SkTgGMOSO377QdPMOmsyvMZsqacTeosED9nY7o36B7hP0mYFnbTwPBI')
+    console.log(courseList)
     return(
         <Grid container
         direction="column"
         justify="center"
         alignItems="center"
         spacing={2}>
-            <Grid item xs={12}>
-                <Button variant="contained" color="primary" onClick={() =>  navigation.navigate('CourseScreen')}>
-                    CS 213
-                </Button>
-            </Grid>
+            {/* {courseList ? <ClassSelect courseList={courseList} /> : <div>Loading . . .</div>} */}
+            <ClassSelect courseList={courseList}/>
         </Grid>
 
     );
