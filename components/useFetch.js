@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from 'react';
 
 const useFetch = (url, token) => {
-    // const [courseList, setCourseList] = useState([]); 
-    let courseList = []
+    const [courseList, setCourseList] = useState([]); 
+    let courseArray = []
     const [isPending, setIsPending] = useState(false); 
     const [error, setError] = useState(true); 
     useEffect(() => {
@@ -19,8 +19,9 @@ const useFetch = (url, token) => {
             })
             .then((data) => {
                 // console.log(data)
-                data.map(x => courseList.push({id: x.id, course: x.name}))
+                data.map(x => courseArray.push({id: x.id, course: x.name}))
                 // data.map(x => setCourseList([...courseList, {id: x.id, course: x.name}]))
+                setCourseList(data)
                 setIsPending(true); 
                 setError(false); 
                 console.log(courseList)

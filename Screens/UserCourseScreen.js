@@ -29,21 +29,38 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-
-const getUserClasses = async(token) => {
-    const res = await fetch('http://localhost:5001/peerpal-a286b/us-central1/getClasses', {
+const getUserClasses = (token) => {
+  useEffect((token) => {
+    const fetchClasses = async(token) => {
+        const res = await fetch('http://localhost:5001/peerpal-a286b/us-central1/getClasses', {
             headers: {
             authorization: `Bearer ${token}`
-        }
-    })
-    const result_json = await res.json();
-    let courseList = []
-    for (let i=0; i< result_json.length; i++) {
-      courseList.push({id: result_json[i].id, course: result_json[i].name})
-      // console.log(result_json[i])
-    }
-    return (courseList)
+            }})
+        if (!res.ok) throw res;
+        const result_json = await res.json();
+        let courseList = []
+        for (let i=0; i< result_json.length; i++) {
+            courseList.push({id: result_json[i].id, course: result_json[i].name})
+            // console.log(result_json[i])
+            }
+        setCourseList(courseList)}
+        fetchClasses
+    }, [])
 }
+
+async function asyncCall() {
+    console.log('calling');
+    const result = new Promise(resolve => {
+      setTimeout(function(){ console.log('hello world'); }, 3000);
+    });
+    result.then((value)=>{
+      console.log("called")
+      asyncCall();
+    })
+    .catch((err)=>console.log(err))
+    // console.log(result);
+    // expected output: "resolved"
+  }
 
 const UserCourseScreen = ({route, navigation}) => {
     // const user_class_json= getUserClasses('1876~6TIbmwUY1SkTgGMOSO377QdPMOmsyvMZsqacTeosED9nY7o36B7hP0mYFnbTwPBI')
@@ -53,11 +70,12 @@ const UserCourseScreen = ({route, navigation}) => {
     //   console.log(user_class_json[i])
     // }
     // This is Alan here trying to see if I can create a custom hook in the compoenents folder
+    const [courseList, setCourseList] = useState([]);
     
-    //const {courseList, isPending, error} = useFetch('http://localhost:5001/peerpal-a286b/us-central1/getClasses', '1876~6TIbmwUY1SkTgGMOSO377QdPMOmsyvMZsqacTeosED9nY7o36B7hP0mYFnbTwPBI')
-    const [courseList, setCourseList] = useState([])
+    getUserClasses('http://localhost:5001/peerpal-a286b/us-central1/getClasses', '1876~6TIbmwUY1SkTgGMOSO377QdPMOmsyvMZsqacTeosED9nY7o36B7hP0mYFnbTwPBI')
     
-    getUserClasses('1876~6TIbmwUY1SkTgGMOSO377QdPMOmsyvMZsqacTeosED9nY7o36B7hP0mYFnbTwPBI')
+    // [courseList, setCourseList] = useState([])
+    // getUserClasses('1876~6TIbmwUY1SkTgGMOSO377QdPMOmsyvMZsqacTeosED9nY7o36B7hP0mYFnbTwPBI')
     console.log(courseList)
     return(
         <Grid container
@@ -66,7 +84,7 @@ const UserCourseScreen = ({route, navigation}) => {
         alignItems="center"
         spacing={2}>
             {/* {courseList ? <ClassSelect courseList={courseList} /> : <div>Loading . . .</div>} */}
-            <ClassSelect courseList={courseList} />
+            {courseList.length != 0 && <ClassSelect courseList={courseList}/> || console.log(courseList)}
         </Grid>
 
     );
