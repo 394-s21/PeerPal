@@ -47,12 +47,31 @@ exports.getClasses = functions.https.onRequest(async (req, res) => {
 
         // TODO
         // Call updateGrades on classes (if we want to update every class)
+        const updateClasses = async (user_key, user_id, class_ids) => {
+
+        }
 
         res.send(currentClasses);
+        await updateClasses();
     });
 })
 
 
-// exports.updateGrades = functions.https.onRequest(async (req, res) => {
+exports.updateGrades = functions.https.onRequest(async (req, res) => {
+    // Frontend call:
+    // fetch('https://oururl.com/api/updateGrades', {
+    //     headers: {
+    //         authorization: `Bearer ${key}`,
+    //     },
+    //     body: {
+    //         user_id: user_id,
+    //         class_ids: [
+    //             1,
+    //             2,
+    //             3,
+    //             4
+    //         ]
+    //     }
+    // })
 
-// })
+})
