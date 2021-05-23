@@ -36,7 +36,7 @@ exports.getClasses = functions.https.onRequest(async (req, res) => {
             return i.end_at === "2021-06-26T05:00:00Z"
         })
         // console.log(currentClasses)
-        // const user_id = result_json[0].enrollments[0].user_id;
+        
         // const classes_result = await fetch(`https://canvas.northwestern.edu/api/v1/users/${user_id}/enrollments?per_page=100`, {
         //     headers: {
         //         authorization: `Bearer ${key}`
@@ -47,12 +47,13 @@ exports.getClasses = functions.https.onRequest(async (req, res) => {
 
         // TODO
         // Call updateGrades on classes (if we want to update every class)
-        const updateClasses = async (user_key, user_id, class_ids) => {
 
+        const user_id = result_json[0].enrollments[0].user_id;
+        const updateClasses = async (user_key, user_id, curr_classes) => {
+            
         }
-
         res.send(currentClasses);
-        await updateClasses();
+        await updateClasses(key,user_id,currentClasses);
     });
 })
 
