@@ -65,13 +65,13 @@ exports.getClasses = functions.https.onRequest(async (req, res) => {
         // Call updateGrades on classes (if we want to update every class)
 
         const user_id = result_json[0].enrollments[0].user_id;
-        const updateClass = async (user_key, user_id, curr_class) => {
+        const updateClass = async (user_key, user_id, curr_class /* class id */) => {
             let checkQuiz = true
             let checkAssignment = true
             let assignment_grades_promises = []
             let quiz_grades_promises = []
 
-            const assignments = await fetch(`https://canvas.northwestern.edu/api/v1/courses/${curr_class}/assignments`, {
+            const assignments = await fetch(`https://canvas.northwestern.edu/api/v1/courses/${curr_class}/assignments?per_page=${per_page}`, {
                 headers: {
                     authorization: `Bearer ${user_key}`
                 }
@@ -81,7 +81,7 @@ exports.getClasses = functions.https.onRequest(async (req, res) => {
             if (assignments_json.message){
                 checkAssignment = false
             }
-            const quizzes = await fetch(`https://canvas.northwestern.edu/api/v1/courses/${curr_class}/quizzes`, {
+            const quizzes = await fetch(`https://canvas.northwestern.edu/api/v1/courses/${curr_class}/quizzes?per_page=${per_page}`, {
                 headers: {
                     authorization: `Bearer ${user_key}`
                 }
@@ -92,12 +92,12 @@ exports.getClasses = functions.https.onRequest(async (req, res) => {
                 checkQuiz = false
                 console.log("Check if quiz is disabled", checkQuiz)
             }
-            console.log("Quizzes: ", quizzes_json)
+            // console.log("Quizzes: ", quizzes_json)
             if (checkAssignment){
                 assignments_json.forEach(
                     assignment => {
                         assignment_grades_promises.push(
-                            fetch(`https://canvas.northwestern.edu/api/v1/courses/${curr_class[0]}/assignments/${assignment.id}/submissions/${user_id}`, {
+                            fetch(`https://canvas.northwestern.edu/api/v1/courses/${curr_class}/assignments/${assignment.id}/submissions/${user_id}`, {
                                 headers: {
                                     authorization: `Bearer ${user_key}`
                                 }
@@ -112,7 +112,7 @@ exports.getClasses = functions.https.onRequest(async (req, res) => {
                     quiz => {
                         quiz_grades_promises.push(
                             // quiz.id might not work
-                            fetch(`https://canvas.northwestern.edu/api/v1/courses/${curr_class[0]}/quizzes/${quiz.id}/submission`, {
+                            fetch(`https://canvas.northwestern.edu/api/v1/courses/${curr_class}/quizzes/${quiz.id}/submission`, {
                                 headers: {
                                     authorization: `Bearer ${user_key}`
                                 }
@@ -123,36 +123,53 @@ exports.getClasses = functions.https.onRequest(async (req, res) => {
             }
 
             // Resolve promises
+            let assignmentList = []
             if (checkAssignment){
-                let assignmentList = []
                 // let assignmentsPoints = []
                 for (i=0; i<assignment_grades_promises.length; i++ ){
                     const assignment = await assignment_grades_promises[i]
                     const assignment_json = await assignment.json()
                     console.log("assignment", assignment_json)
                     // assignmentsPoints.push(assignments_json[i].points_possible)
-                    assignment_json.score ? assignmentList.push({id: assignments_json[i].id, points_possible: assignments_json[i].points_possible, score: assignment_json.score})
+                    assignment_json.score ? assignmentList.push({id: assignments_json[i].id, points_possible: assignments_json[i].points_possible, score: assignment_json.score, name: assignments_json[i].name})
                     :
-                    assignmentList.push({id: assignments_json[i].id, points_possible: assignments_json[i].points_possible, score: null})
+                    assignmentList.push({id: assignments_json[i].id, points_possible: assignments_json[i].points_possible, score: null, name: assignments_json[i].name})
                     console.log("points possible", assignment_json)
                 }
-                const courseRef = db.ref('/course/' + curr_class[0]);
+                console.log(curr_class + '\n\n\n\n')
+                const courseRef = db.ref('/course/' + curr_class);
                     // console.log("orderRef",orderRef)
                     courseRef.update({
-                        Assignment: assignmentList
+                        Assignments: assignmentList
                 });
             }
-            if (checkQuiz){
-                for (i=0; i<quiz_grades_promises.length; i++ ){
-                    const quiz = await quiz_grades_promises[i]
-                    
-                }
-            }
+            // Resolve quiz promises
+            // let quizList = []
+            // if (checkQuiz){
+            //     // let assignmentsPoints = []
+            //     for (i=0; i<quiz_grades_promises.length; i++ ){
+            //         const quiz = await quiz_grades_promises[i]
+            //         const quiz_json = await assignment.json()
+            //         console.log("quiz", quiz_json)
+            //         // assignmentsPoints.push(assignments_json[i].points_possible)
+            //         quiz_json.score ? quizList.push({id: quizzes_json[i].id, points_possible: quizzes_json[i].points_possible, score: quiz_json.score})
+            //         :
+            //         quizList.push({id: quizzes_json[i].id, points_possible: quizzes_json[i].points_possible, score: null})
+            //         console.log("points possible", assignment_json)
+            //     }
+            //     console.log(curr_class + '\n\n\n\n')
+            //     const courseRef = db.ref('/course/' + curr_class);
+            //         // console.log("orderRef",orderRef)
+            //         courseRef.update({
+            //             Quizzes: quizList
+            //     });
+            // }
         }
         res.send(currentClasses);
-        await updateClass(key,user_id,currentClasses[0].id);
-        console.log("Assignment list: ", assignment_grades_promises)
-        
+        for (i = 0; i < currentClasses.length; i++) {
+            await updateClass(key, user_id, currentClasses[i].id)
+        }
+        console.log(currentClasses)
     });
 })
 
