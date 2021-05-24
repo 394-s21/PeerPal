@@ -25,7 +25,7 @@ const db = admin.database();
 exports.getClasses = functions.https.onRequest(async (req, res) => {
     cors()(req, res, async () => {
         const authorization = req.headers.authorization;
-        const per_page = 100; 
+        const per_page = 1000; 
         const key = authorization.replace("Bearer ", "");
         const result = await fetch(`https://canvas.northwestern.edu/api/v1/courses/?per_page=${per_page}`, {
             headers: {
@@ -147,7 +147,6 @@ exports.getClasses = functions.https.onRequest(async (req, res) => {
         //     await updateClass(key, user_id, currentClasses[i].id)
         // }
         currentClasses.forEach(async eachClass => await updateClass(key, user_id, eachClass.id))
-        // console.log(currentClasses)
         res.send(currentClasses);
     });
 })

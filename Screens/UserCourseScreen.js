@@ -55,6 +55,14 @@ const UserCourseScreen = ({route, navigation}) => {
     
     const token = '1876~6TIbmwUY1SkTgGMOSO377QdPMOmsyvMZsqacTeosED9nY7o36B7hP0mYFnbTwPBI' //christopher's token
     const token2 = '1876~zeAbPlt0suio6fZRlJEjRPYC85jXROLGPmEBszXJChZv3fDeIC5TMD3si6TI3TU8' //alan's token 
+
+    const view_class = () => {
+      // var user = firebase.auth().currentUser;
+      
+      navigation.navigate('CourseScreen')
+      
+    }
+
     useEffect(() => {
         const fetchClasses = async() => {
             const res = await fetch('http://localhost:5001/peerpal-a286b/us-central1/getClasses', {
@@ -84,6 +92,9 @@ const UserCourseScreen = ({route, navigation}) => {
         spacing={2}>
             {/* {courseList ? <ClassSelect courseList={courseList} /> : <div>Loading . . .</div>} */}
             <ClassSelect courseList={courseList}/>
+            <Button variant="contained" color="primary" onClick={() => view_class() }>
+                    GO
+                </Button>
         </Grid>
 
     );

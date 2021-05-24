@@ -12,53 +12,10 @@ import Table from '@material-ui/core/Table'
 import { DataGrid } from '@material-ui/data-grid'
 import Button from '@material-ui/core/Button';
 import ClassChart from '../components/ClassChart'
+import { firebase } from '../components/firebase';
 
-const columns = [
-    { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'studentName', headerName: 'Name', width: 130 },
-    {
-      field: 'a1',
-      headerName: 'Homework 1',
-      type: 'number',
-      width: 160,
-    },
-
-    {
-      field: 'a2',
-      headerName: 'Homework 2',
-      type: 'number',
-      width: 160,
-    },
-
-    {
-      field: 'a3',
-      headerName: 'Homework 3',
-      type: 'number',
-      width: 160,
-    },
-
-    {
-      field: 'a4',
-      headerName: 'Midterm',
-      type: 'number',
-      width: 160,
-    },
-
-
-  ];
   
-  const rows = [
-    { id: 1, studentName: 'Student 1 (you)', a1: 100, a2: 95, a3: 85, a4: 70 },
-    { id: 2, studentName: 'Student 2', a1: 100, a2: 100, a3: 100, a4: 88 },
-    { id: 3, studentName: 'Student 3', a1: 95, a2: 85, a3: 95, a4: 90 },
-    { id: 4, studentName: 'Student 4', a1: 65, a2: 75, a3: 95, a4: 72 },
-    { id: 5, studentName: 'Student 5', a1: 75, a2: 75, a3: 75, a4: 62 },
-    { id: 6, studentName: 'Student 6', a1: 75, a2: 85, a3: 85, a4: 76 },
-  ];
-
-  const keys = ["a1","a2","a3","a4"];
-
-  const rowWeight = [.1, .1, .1, .7];
+ 
 
 const useStyles = makeStyles({
     root: {
@@ -89,6 +46,10 @@ const useStyles = makeStyles({
 
 
 const CourseScreen = ({route,navigation}) => {
+
+  const ref = firebase.database().ref('/course/137169/Assignments/0')
+  console.log(ref)
+
 
     const classes = useStyles();
 
