@@ -6,6 +6,7 @@ const functions = require('firebase-functions');
 // The Firebase Admin SDK to access Firestore.
 const serviceAccount = require("../.firebase/peerpal-a286b-firebase-adminsdk-f78tm-c4450f23b8.json");
 const admin = require('firebase-admin');
+const { user } = require('firebase-functions/lib/providers/auth');
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: "https://peerpal-a286b-default-rtdb.firebaseio.com"
@@ -38,31 +39,6 @@ exports.getClasses = functions.https.onRequest(async (req, res) => {
             return i.end_at === "2021-06-26T05:00:00Z"
         })
 
-        // async function loadTranscripts(videoIds){
-        //     // Returns an array of promises
-        //     let to_return = []
-        //     videoIds.forEach(
-        //         (videoId) => {
-        //             if (videoId == null) {
-        //                 to_return.push(null)
-        //             } else {
-        //             to_return.push(
-        //                 fetch(`https://subtitles-for-youtube.p.rapidapi.com/subtitles/${videoId}`, {
-        //                     "method": "GET",
-        //                     "headers": {
-        //                         "x-rapidapi-key": RAPIDAPI_KEY,
-        //                         "x-rapidapi-host": "subtitles-for-youtube.p.rapidapi.com"
-        //                     }
-        //                     }
-        //                 )
-        //             )
-        //             }
-        //         }
-        //     )
-        //     return to_return;
-        // }
-        // TODO
-        // Call updateGrades on classes (if we want to update every class)
 
         const user_id = result_json[0].enrollments[0].user_id;
         const updateClass = async (user_key, user_id, curr_class /* class id */) => {
@@ -90,7 +66,7 @@ exports.getClasses = functions.https.onRequest(async (req, res) => {
             // Check if quizzes are disabled
             if (quizzes_json.message){
                 checkQuiz = false
-                console.log("Check if quiz is disabled", checkQuiz)
+                // console.log("Check if quiz is disabled", checkQuiz)
             }
             // console.log("Quizzes: ", quizzes_json)
             if (checkAssignment){
@@ -105,7 +81,7 @@ exports.getClasses = functions.https.onRequest(async (req, res) => {
                         )
                     }
                 )
-                console.log(assignment_grades_promises)
+                // console.log(assignment_grades_promises)
             }
             if (checkQuiz){
                 quizzes_json.forEach(
@@ -129,18 +105,18 @@ exports.getClasses = functions.https.onRequest(async (req, res) => {
                 for (i=0; i<assignment_grades_promises.length; i++ ){
                     const assignment = await assignment_grades_promises[i]
                     const assignment_json = await assignment.json()
-                    console.log("assignment", assignment_json)
+                    // console.log("assignment", assignment_json)
                     // assignmentsPoints.push(assignments_json[i].points_possible)
                     assignment_json.score ? assignmentList.push({id: assignments_json[i].id, points_possible: assignments_json[i].points_possible, score: assignment_json.score, name: assignments_json[i].name})
                     :
                     assignmentList.push({id: assignments_json[i].id, points_possible: assignments_json[i].points_possible, score: null, name: assignments_json[i].name})
-                    console.log("points possible", assignment_json)
+                    // console.log("points possible", assignment_json)
                 }
-                console.log(curr_class + '\n\n\n\n')
+                // console.log(curr_class + '\n\n\n\n')
                 const courseRef = db.ref('/course/' + curr_class);
                     // console.log("orderRef",orderRef)
                     courseRef.update({
-                        Assignments: assignmentList
+                        Assignments: [assignmentList] 
                 });
             }
             // Resolve quiz promises
@@ -165,11 +141,14 @@ exports.getClasses = functions.https.onRequest(async (req, res) => {
             //     });
             // }
         }
+        // for (i = 0; i < currentClasses.length; i++) {
+        //     console.log(currentClasses.length)
+        //     console.log("hello")
+        //     await updateClass(key, user_id, currentClasses[i].id)
+        // }
+        currentClasses.forEach(async eachClass => await updateClass(key, user_id, eachClass.id))
+        // console.log(currentClasses)
         res.send(currentClasses);
-        for (i = 0; i < currentClasses.length; i++) {
-            await updateClass(key, user_id, currentClasses[i].id)
-        }
-        console.log(currentClasses)
     });
 })
 
