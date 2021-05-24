@@ -53,13 +53,13 @@ const UserCourseScreen = ({route, navigation}) => {
     // This is Alan here trying to see if I can create a custom hook in the compoenents folder
     const [courseList, setCourseList] = useState([]);
     
-    const token = '1876~6TIbmwUY1SkTgGMOSO377QdPMOmsyvMZsqacTeosED9nY7o36B7hP0mYFnbTwPBI'
-
+    const token = '1876~6TIbmwUY1SkTgGMOSO377QdPMOmsyvMZsqacTeosED9nY7o36B7hP0mYFnbTwPBI' //christopher's token
+    const token2 = '1876~zeAbPlt0suio6fZRlJEjRPYC85jXROLGPmEBszXJChZv3fDeIC5TMD3si6TI3TU8' //alan's token 
     useEffect(() => {
         const fetchClasses = async() => {
             const res = await fetch('http://localhost:5001/peerpal-a286b/us-central1/getClasses', {
                 headers: {
-                authorization: `Bearer ${token}`
+                authorization: `Bearer ${token2}`
                 }})
             if (!res.ok) throw res;
             const result_json = await res.json();
