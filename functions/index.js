@@ -194,23 +194,27 @@ exports.updateClasses = functions.https.onRequest(async (req, res) => {
         // 2. For each class, get points_possible, set points_possible in database
         let courses_assignments_json = [];
         let courses_assignments = [];
-        course_ids.map((course_id) => {
-            courses_assignments.push(
-                fetch(`https://canvas.northwestern.edu/api/v1/courses/${course_id}/assignments?per_page=${per_page}`, {
-                    headers: {
-                        authorization: `Bearer ${key}`
-                    }
-                }))
-        })
-
-        Promise.all(courses_assignments)
-        .then((course_assignments) => {
-            courses_assignments_json.push(
-                course_assignments.json()
-            )
-        })
-        .catch((err) => console.log(err));
+        // course_ids.map((course_id) => {
+        //     courses_assignments.push(
+        //         await fetch(`https://canvas.northwestern.edu/api/v1/courses/${course_id}/assignments?per_page=${per_page}`, {
+        //             headers: {
+        //                 authorization: `Bearer ${key}`
+        //             }
+        //         }))
+        // })
+        let course_assignments_array = []; 
+        Promise.all(course_ids.map(course_id => fetch(`https://canvas.northwestern.edu/api/v1/courses/${course_id}/assignments?per_page=${per_page}`, {
+            headers: {
+                authorization: `Bearer ${key}`
+            }})))
+            .then(responses => Promise.all(responses.map(res => res.json())))
+            .then(responses => console.log(responses[1]))
         
+
+
+
+
+
         let courses_assignments_scores = []
         // Updating each course
         courses_assignments_json.map((course_assignments_json, idx) => {
@@ -224,38 +228,39 @@ exports.updateClasses = functions.https.onRequest(async (req, res) => {
                 })
 
                 // Preparing for step 3.
-                courses_assignments_scores[idx].push(
-                    fetch(`https://canvas.northwestern.edu/api/v1/courses/${course_ids[idx]}/assignments/${assignment_json.id}/submissions/${user_id}`, {
-                        headers: {
-                            authorization: `Bearer ${key}`
-                        }
-                    })
-                );
+                // courses_assignments_scores[idx].push(
+                //     fetch(`https://canvas.northwestern.edu/api/v1/courses/${course_ids[idx]}/assignments/${assignment_json.id}/submissions/${user_id}`, {
+                //         headers: {
+                //             authorization: `Bearer ${key}`
+                //         }
+                //     })
+                // );
             })
         });
 
 
         // 3. For each class, for each assignment, get score, set score in database
-        let courses_assignments_scores_json = [];
-        courses_assignments_scores.map((course_assignment_scores) => {
-            Promise.all(course_assignment_scores)
-            .then((assignment_score) => courses_assignments_scores_json.push(assignment_score.json()))
-            .catch((err) => console.log(err));
-        })
+        // let courses_assignments_scores_json = [];
+        // courses_assignments_scores.map((course_assignment_scores) => {
+        //     Promise.all(course_assignment_scores)
+        //     .then((assignment_score) => courses_assignments_scores_json.push(assignment_score.json()))
+        //     .catch((err) => console.log(err));
+        // })
 
-        // mapping over each course
-        courses_assignments_scores_json.map((course_assignments_scores_json, course_idx) => {
-            // mapping over each assignment
-            course_assignments_scores_json.map((course_assignment_score_json, assignment_idx) => {
-                const assignment_ref = db.ref('/course/' + course_ids[course_idx] + '/assignments/' + courses_assignments_json[course_idx][assignment_idx].id + '/' + user_id);
-                assignment_ref.update({
-                    score: course_assignment_score_json.score
-                })
-            })
-        })
+        // // mapping over each course
+        // courses_assignments_scores_json.map((course_assignments_scores_json, course_idx) => {
+        //     // mapping over each assignment
+        //     course_assignments_scores_json.map((course_assignment_score_json, assignment_idx) => {
+        //         const assignment_ref = db.ref('/course/' + course_ids[course_idx] + '/assignments/' + courses_assignments_json[course_idx][assignment_idx].id + '/' + user_id);
+        //         assignment_ref.update({
+        //             score: course_assignment_score_json.score
+        //         })
+        //     })
+        // })
 
         // 4. For each class, get enrollment_score, set enrollment_score in database
-        res.send(assignments)
+        console.log(course_assignments_array)
+        res.send(course_assignments_array)
     });
 });
 
