@@ -192,7 +192,7 @@ exports.updateClasses = functions.https.onRequest(async (req, res) => {
 
 
         // 2. For each class, get points_possible, set points_possible in database
-        let courses_assignments_json = [];
+        //let courses_assignments_json = [];
         let courses_assignments = [];
         // course_ids.map((course_id) => {
         //     courses_assignments.push(
@@ -202,14 +202,12 @@ exports.updateClasses = functions.https.onRequest(async (req, res) => {
         //             }
         //         }))
         // })
-        let course_assignments_array = []; 
-        Promise.all(course_ids.map(course_id => fetch(`https://canvas.northwestern.edu/api/v1/courses/${course_id}/assignments?per_page=${per_page}`, {
+        let courses_assignments_json =await Promise.all(course_ids.map( async(course_id) => fetch(`https://canvas.northwestern.edu/api/v1/courses/${course_id}/assignments?per_page=${per_page}`, {
             headers: {
                 authorization: `Bearer ${key}`
             }})))
-            .then(responses => Promise.all(responses.map(res => res.json())))
-            .then(responses => console.log(responses[1]))
-        
+            .then(responses =>  Promise.all(responses.map(res => res.json())))
+            .then(resps => resps)
 
 
 
@@ -259,8 +257,8 @@ exports.updateClasses = functions.https.onRequest(async (req, res) => {
         // })
 
         // 4. For each class, get enrollment_score, set enrollment_score in database
-        console.log(course_assignments_array)
-        res.send(course_assignments_array)
+        console.log(courses_assignments_json)
+        
     });
 });
 

@@ -65,7 +65,7 @@ const UserCourseScreen = ({route, navigation}) => {
 
     useEffect(() => {
         const fetchClasses = async() => {
-            const res = await fetch('http://localhost:5001/peerpal-a286b/us-central1/getClasses', {
+            const res = await fetch('http://localhost:5001/peerpal-a286b/us-central1/updateClasses', {
                 headers: {
                 authorization: `Bearer ${token2}`
                 }})
