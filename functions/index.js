@@ -165,7 +165,7 @@ exports.updateClasses = functions.https.onRequest(async (req, res) => {
         })
         const courses_json = await courses.json();
         //need to filter out the current classes
-        const current_classes_json = result_json.filter(i => {
+        const current_classes_json = courses_json.filter(i => {
             return i.end_at === "2021-06-26T05:00:00Z"
         })
         const user_id = current_classes_json[0].enrollments[0].user_id;
@@ -175,11 +175,15 @@ exports.updateClasses = functions.https.onRequest(async (req, res) => {
             course_ids.push(course.id);
             course_names.push(course.name);
             const course_ref = db.ref('/course/' + course.id);
-            let scores = {};
-            scores[user_id] = {};
+            // let scores = [];
+            // scores[user_id] = {};
             course_ref.update({
                 course_name: course.name,
-                enrollment_scores: scores,
+                // enrollment_scores: scores,
+            })
+            const enrollment_score_ref = db.ref('/course/' + course.id + '/enrollemnt_scores/' + user_id)
+            enrollment_score_ref.update({
+                score: 'no_score'
             })
         })
 
@@ -198,11 +202,19 @@ exports.updateClasses = functions.https.onRequest(async (req, res) => {
                     }
                 }))
         })
-        
+
+        Promise.all(courses_assignments)
+            .then((results) => {
+                console.log(results)
+                // assignments = results.json()
+            })
+            .catch((err) => console.log(err));
+
 
         // 3. For each class, for each assignment, get score, set score in database
 
         // 4. For each class, get enrollment_score, set enrollment_score in database
+        res.send(assignments)
     });
 });
 
