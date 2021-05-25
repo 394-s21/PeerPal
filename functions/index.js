@@ -243,7 +243,9 @@ exports.updateClasses = functions.https.onRequest(async (req, res) => {
             .catch((err) => console.log(err));
         })
 
+        // mapping over each course
         courses_assignments_scores_json.map((course_assignments_scores_json, course_idx) => {
+            // mapping over each assignment
             course_assignments_scores_json.map((course_assignment_score_json, assignment_idx) => {
                 const assignment_ref = db.ref('/course/' + course_ids[course_idx] + '/assignments/' + courses_assignments_json[course_idx][assignment_idx].id + '/' + user_id);
                 assignment_ref.update({
