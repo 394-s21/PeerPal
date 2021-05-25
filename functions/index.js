@@ -198,6 +198,7 @@ exports.updateClasses = functions.https.onRequest(async (req, res) => {
                     }
                 }))
         })
+        
 
         // 3. For each class, for each assignment, get score, set score in database
 
