@@ -152,6 +152,99 @@ exports.getClasses = functions.https.onRequest(async (req, res) => {
 })
 
 
+exports.updateClasses = functions.https.onRequest(async (req, res) => {
+    cors()(req, res, async () => {
+        // 1. Get classes (course_id s), user_id.
+        const per_page = 100;
+        const authorization = req.headers.authorization;
+        const key = authorization.replace("Bearer ", "");
+        const courses = await fetch(`https://canvas.northwestern.edu/api/v1/courses/?per_page=${per_page}`, {
+            headers: {
+                authorization: `Bearer ${key}`
+            }
+        })
+        const courses_json = await courses.json();
+        //need to filter out the current classes
+        const current_classes_json = result_json.filter(i => {
+            return i.end_at === "2021-06-26T05:00:00Z"
+        })
+        const user_id = current_classes_json[0].enrollments[0].user_id;
+        let course_ids = []
+        let course_names = []
+        current_classes_json.map((course) => {
+            course_ids.push(course.id);
+            course_names.push(course.name);
+            const course_ref = db.ref('/course/' + course.id);
+            let scores = {};
+            scores[user_id] = {};
+            course_ref.update({
+                course_name: course.name,
+                enrollment_scores: scores,
+            })
+        })
+
+
+
+
+
+        // 2. For each class, get points_possible, set points_possible in database
+        let assignments;
+        let courses_assignments = [];
+        course_ids.map((course_id) => {
+            courses_assignments.push(
+                fetch(`https://canvas.northwestern.edu/api/v1/courses/${course_id}/assignments?per_page=${per_page}`, {
+                    headers: {
+                        authorization: `Bearer ${key}`
+                    }
+                }))
+        })
+
+        // 3. For each class, for each assignment, get score, set score in database
+
+        // 4. For each class, get enrollment_score, set enrollment_score in database
+    });
+});
+
+
+
+
+/*
+
+courses:
+    - course_id: 1
+        - course_name 1
+        - enrollment_scores: 1, 4
+            - user_id: 1
+                - score 4
+                - learning_strategies: // maybe later
+                    - learning_strategy // maybe later
+        - assignments: 2
+            - assignment_id: 2
+                - assignment_name 2
+                - points_possible 2
+                - users: 1, 3
+                    - user_id: 1
+                        - score 3
+                        - learning_strategies:
+                            - learning_strategy
+users:
+    - user_id:
+        - user_uid
+        - courses:
+            - course_id
+
+
+
+*/
+
+
+
+
+
+
+
+
+
 exports.updateGrades = functions.https.onRequest(async (req, res) => {
     // Frontend call:
     // fetch('https://oururl.com/api/updateGrades', {
