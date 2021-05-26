@@ -229,16 +229,17 @@ exports.updateClasses = functions.https.onRequest(async (req, res) => {
             })
             });
 
-            //console.log(courses_assignments_json)
-
-            let courses_assignments_scores_json =  await Promise.all(courses_assignments_json.map(async assignment =>
-                assignment.map(a => fetch(`https://canvas.northwestern.edu/api/v1/courses/${a.course_id}/assignments/${a.id}/submissions/${user_id}`, {
-                        headers: {
-                            authorization: `Bearer ${key}`
-                        }
-                    }
-                )))).then(responses =>  Promise.all(responses.map(res => console.log(res) )))
-
+            let scores_list = []
+            for (let i = 0; i < courses_assignments_json.length; i++){
+                let t = await Promise.all(courses_assignments_json[i].map(async assignment => fetch(`https://canvas.northwestern.edu/api/v1/courses/${assignment.course_id}/assignments/${assignment.id}/submissions/${user_id}`, {
+                headers:{
+                    authorization: `Bearer ${key}`
+                }
+                })))
+                .then(responses =>  Promise.all(responses.map(res => res.json())))
+                .then(resps => resps)
+                scores_list.push(t)
+            }
 
                 //console.log(courses_assignments_scores_json)
 
@@ -253,7 +254,7 @@ exports.updateClasses = functions.https.onRequest(async (req, res) => {
                
           
 
-        console.log(courses_assignments_scores);
+        console.log(scores_list);
 
 
         // 3. For each class, for each assignment, get score, set score in database
@@ -277,7 +278,7 @@ exports.updateClasses = functions.https.onRequest(async (req, res) => {
         // })
 
         // 4. For each class, get enrollment_score, set enrollment_score in database
-        res.send(courses_assignments_scores_json)
+        res.send(scores_list)
         
     });
 });
