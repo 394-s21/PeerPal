@@ -255,6 +255,16 @@ exports.updateClasses = functions.https.onRequest(async (req, res) => {
           
 
         console.log(scores_list);
+        scores_list.map(async (scores, idx) => {
+            scores.map(async score => {
+                const user_assignment_ref = db.ref('/course/' + course_ids[idx] + '/assignments/' + score.assignment_id + '/users/' + user_id);
+                const assignment_score = score.score ? score.score : 'no_score'
+                console.log(`\n\n\n\n Assignment score: ${assignment_score}`)
+                user_assignment_ref.update({
+                    score: assignment_score
+                })
+            })
+        })
 
 
         // 3. For each class, for each assignment, get score, set score in database
