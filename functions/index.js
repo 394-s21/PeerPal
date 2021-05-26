@@ -187,21 +187,7 @@ exports.updateClasses = functions.https.onRequest(async (req, res) => {
             })
         })
 
-
-
-
-
-        // 2. For each class, get points_possible, set points_possible in database
-        //let courses_assignments_json = [];
-        let courses_assignments = [];
-        // course_ids.map((course_id) => {
-        //     courses_assignments.push(
-        //         await fetch(`https://canvas.northwestern.edu/api/v1/courses/${course_id}/assignments?per_page=${per_page}`, {
-        //             headers: {
-        //                 authorization: `Bearer ${key}`
-        //             }
-        //         }))
-        // })
+        //fetch assignments endpoint 
         let courses_assignments_json = await Promise.all(course_ids.map( async(course_id) => fetch(`https://canvas.northwestern.edu/api/v1/courses/${course_id}/assignments?per_page=${per_page}`, {
             headers: {
                 authorization: `Bearer ${key}`
@@ -212,88 +198,47 @@ exports.updateClasses = functions.https.onRequest(async (req, res) => {
 
 
 
-
-        //let courses_assignments_scores = []
-        // Updating each course
-            courses_assignments_json.map((course_assignments_json, idx) => {
-            // Updating each assignment
+        // Updating each course to firebase 
+        courses_assignments_json.map((course_assignments_json, idx) => {
+        // Updating each assignment
             course_assignments_json.map(async(assignment_json) => {
                 const assignment_ref = db.ref('/course/' + course_ids[idx] + '/assignments/' + assignment_json.id);
                 assignment_ref.update({
                     assignment_name: assignment_json.name,
                     points_possible: assignment_json.points_possible,
                     users: {}
-                
-                })
+                })})
+        });
 
-            })
-            });
-
-            let scores_list = []
-            for (let i = 0; i < courses_assignments_json.length; i++){
-                let t = await Promise.all(courses_assignments_json[i].map(async assignment => fetch(`https://canvas.northwestern.edu/api/v1/courses/${assignment.course_id}/assignments/${assignment.id}/submissions/${user_id}`, {
-                headers:{
-                    authorization: `Bearer ${key}`
-                }
-                })))
-                .then(responses =>  Promise.all(responses.map(res => res.json())))
-                .then(resps => resps)
-                scores_list.push(t)
+        // 3. For each class, for each assignment, get score, set score in database
+        let scores_list = []
+        for (let i = 0; i < courses_assignments_json.length; i++){
+            let t = await Promise.all(courses_assignments_json[i].map(async assignment => fetch(`https://canvas.northwestern.edu/api/v1/courses/${assignment.course_id}/assignments/${assignment.id}/submissions/${user_id}`, {
+            headers:{
+                authorization: `Bearer ${key}`
             }
-
-                //console.log(courses_assignments_scores_json)
-
-                // fetch(`https://canvas.northwestern.edu/api/v1/courses/${assignment.course_id}/assignments/${assignment.id}/submissions/${user_id}`, {
-                //     headers: {
-                //         authorization: `Bearer ${key}`
-                //     }
-                // })))
-                // .then(responses =>  Promise.all(responses.map(res => res)))
-            //console.log(courses_assignments_scores_json)
-              //  Preparing for step 3.
+            })))
+            .then(responses =>  Promise.all(responses.map(res => res.json())))
+            .then(resps => resps)
+            scores_list.push(t)
+        }
                
-          
-
-        console.log(scores_list);
-        scores_list.map(async (scores, idx) => {
-            scores.map(async score => {
+        scores_list.map((scores, idx) => {
+            scores.map(score => {
                 const user_assignment_ref = db.ref('/course/' + course_ids[idx] + '/assignments/' + score.assignment_id + '/users/' + user_id);
                 const assignment_score = score.score ? score.score : 'no_score'
-                console.log(`\n\n\n\n Assignment score: ${assignment_score}`)
-                user_assignment_ref.update({
+                // console.log(`\n\n\n\n Assignment score: ${assignment_score}`)
+                user_assignment_ref.update({   //update() actually shows the user_id but push() encrypts the user_id 
                     score: assignment_score
                 })
             })
         })
-
-
-        // 3. For each class, for each assignment, get score, set score in database
-        //let courses_assignments_scores_json;
-        // let courses_assignments_scores_json = [];
-        // courses_assignments_scores.map((course_assignment_scores) => {
-        //     Promise.all(course_assignment_scores)
-        //     .then((assignment_score) => courses_assignments_scores_json.push(assignment_score.json()))
-        //     .catch((err) => console.log(err));
-        // })
-
-        // // mapping over each course
-        // courses_assignments_scores_json.map((course_assignments_scores_json, course_idx) => {
-        //     // mapping over each assignment
-        //     course_assignments_scores_json.map((course_assignment_score_json, assignment_idx) => {
-        //         const assignment_ref = db.ref('/course/' + course_ids[course_idx] + '/assignments/' + courses_assignments_json[course_idx][assignment_idx].id + '/' + user_id);
-        //         assignment_ref.update({
-        //             score: course_assignment_score_json.score
-        //         })
-        //     })
-        // })
 
         // 4. For each class, get enrollment_score, set enrollment_score in database
         res.send(scores_list)
         
     });
 });
-
-
 
 
 /*
@@ -324,30 +269,3 @@ users:
 
 
 */
-
-
-
-
-
-
-
-
-
-exports.updateGrades = functions.https.onRequest(async (req, res) => {
-    // Frontend call:
-    // fetch('https://oururl.com/api/updateGrades', {
-    //     headers: {
-    //         authorization: `Bearer ${key}`,
-    //     },
-    //     body: {
-    //         user_id: user_id,
-    //         class_ids: [
-    //             1,
-    //             2,
-    //             3,
-    //             4
-    //         ]
-    //     }
-    // })
-
-})
