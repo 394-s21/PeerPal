@@ -213,28 +213,45 @@ exports.updateClasses = functions.https.onRequest(async (req, res) => {
 
 
 
-        let courses_assignments_scores = []
+        //let courses_assignments_scores = []
         // Updating each course
-        courses_assignments_json.map((course_assignments_json, idx) => {
+            courses_assignments_json.map((course_assignments_json, idx) => {
             // Updating each assignment
-            course_assignments_json.map((assignment_json) => {
+            course_assignments_json.map(async(assignment_json) => {
                 const assignment_ref = db.ref('/course/' + course_ids[idx] + '/assignments/' + assignment_json.id);
                 assignment_ref.update({
                     assignment_name: assignment_json.name,
                     points_possible: assignment_json.points_possible,
                     users: {}
+                
                 })
 
-                // Preparing for step 3.
-                // courses_assignments_scores[idx].push(
-                //     fetch(`https://canvas.northwestern.edu/api/v1/courses/${course_ids[idx]}/assignments/${assignment_json.id}/submissions/${user_id}`, {
-                //         headers: {
-                //             authorization: `Bearer ${key}`
-                //         }
-                //     })
-                // );
             })
-        });
+            });
+
+            //console.log(courses_assignments_json)
+
+            let courses_assignments_scores_json =  await Promise.all(courses_assignments_json.map(async assignment =>
+                assignment.map(a => fetch(`https://canvas.northwestern.edu/api/v1/courses/${a.course_id}/assignments/${a.id}/submissions/${user_id}`, {
+                        headers: {
+                            authorization: `Bearer ${key}`
+                        }
+                    }
+                )))).then(responses =>  Promise.all(responses.map(res => console.log(res) )))
+
+
+                //console.log(courses_assignments_scores_json)
+
+                // fetch(`https://canvas.northwestern.edu/api/v1/courses/${assignment.course_id}/assignments/${assignment.id}/submissions/${user_id}`, {
+                //     headers: {
+                //         authorization: `Bearer ${key}`
+                //     }
+                // })))
+                // .then(responses =>  Promise.all(responses.map(res => res)))
+            //console.log(courses_assignments_scores_json)
+              //  Preparing for step 3.
+               
+          
 
 
         // 3. For each class, for each assignment, get score, set score in database
@@ -257,7 +274,7 @@ exports.updateClasses = functions.https.onRequest(async (req, res) => {
         // })
 
         // 4. For each class, get enrollment_score, set enrollment_score in database
-        console.log(courses_assignments_json)
+        res.send(courses_assignments_scores_json)
         
     });
 });
