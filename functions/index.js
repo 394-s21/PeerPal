@@ -202,7 +202,7 @@ exports.updateClasses = functions.https.onRequest(async (req, res) => {
         //             }
         //         }))
         // })
-        let courses_assignments_json =await Promise.all(course_ids.map( async(course_id) => fetch(`https://canvas.northwestern.edu/api/v1/courses/${course_id}/assignments?per_page=${per_page}`, {
+        let courses_assignments_json = await Promise.all(course_ids.map( async(course_id) => fetch(`https://canvas.northwestern.edu/api/v1/courses/${course_id}/assignments?per_page=${per_page}`, {
             headers: {
                 authorization: `Bearer ${key}`
             }})))
@@ -253,8 +253,11 @@ exports.updateClasses = functions.https.onRequest(async (req, res) => {
                
           
 
+        console.log(courses_assignments_scores);
+
 
         // 3. For each class, for each assignment, get score, set score in database
+        //let courses_assignments_scores_json;
         // let courses_assignments_scores_json = [];
         // courses_assignments_scores.map((course_assignment_scores) => {
         //     Promise.all(course_assignment_scores)
