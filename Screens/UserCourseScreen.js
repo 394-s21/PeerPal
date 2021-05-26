@@ -94,7 +94,7 @@ const UserCourseScreen = ({route, navigation}) => {
             <ClassSelect courseList={courseList}/>
             <Button variant="contained" color="primary" onClick={() => view_class() }>
                     GO
-                </Button>
+            </Button>
         </Grid>
 
     );
