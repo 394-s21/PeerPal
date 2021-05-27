@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View} from 'react-native'
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -12,53 +12,7 @@ import Table from '@material-ui/core/Table'
 import { DataGrid } from '@material-ui/data-grid'
 import Button from '@material-ui/core/Button';
 import ClassChart from '../components/ClassChart'
-
-const columns = [
-    { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'studentName', headerName: 'Name', width: 130 },
-    {
-      field: 'a1',
-      headerName: 'Homework 1',
-      type: 'number',
-      width: 160,
-    },
-
-    {
-      field: 'a2',
-      headerName: 'Homework 2',
-      type: 'number',
-      width: 160,
-    },
-
-    {
-      field: 'a3',
-      headerName: 'Homework 3',
-      type: 'number',
-      width: 160,
-    },
-
-    {
-      field: 'a4',
-      headerName: 'Midterm',
-      type: 'number',
-      width: 160,
-    },
-
-
-  ];
-  
-  const rows = [
-    { id: 1, studentName: 'Student 1 (you)', a1: 100, a2: 95, a3: 85, a4: 70 },
-    { id: 2, studentName: 'Student 2', a1: 100, a2: 100, a3: 100, a4: 88 },
-    { id: 3, studentName: 'Student 3', a1: 95, a2: 85, a3: 95, a4: 90 },
-    { id: 4, studentName: 'Student 4', a1: 65, a2: 75, a3: 95, a4: 72 },
-    { id: 5, studentName: 'Student 5', a1: 75, a2: 75, a3: 75, a4: 62 },
-    { id: 6, studentName: 'Student 6', a1: 75, a2: 85, a3: 85, a4: 76 },
-  ];
-
-  const keys = ["a1","a2","a3","a4"];
-
-  const rowWeight = [.1, .1, .1, .7];
+import { firebase } from '../components/firebase';
 
 const useStyles = makeStyles({
     root: {
@@ -87,8 +41,47 @@ const useStyles = makeStyles({
     },
 });
 
+const columns = [
+  { field: 'id', headerName: 'ID', width: 90},
+  { field: 'assignment_name', headerName: 'Assignment', width: 250 },
+  { field: 'score', headerName: 'Score', type: 'number', width: 90},
+  { field: 'points_possible', headerName: 'Total', type: 'number', width: 90 },
+  { field: 'percentage', headerName: 'Percentage', type: 'number', width: 90,
+    valueGetter: (params) =>
+    params.getValue(params.id, 'score')/params.getValue(params.id, 'points_possible')
+    },
+  { field: 'strats', headerName: 'Learning Strategies', width: 150, sortable: false },
+];
+
+// updates courseInfo state with firebase json
+[courseInfo, setCourseInfo] = useState({})
+useEffect(() => {
+  const cdb = firebase.database().ref('course/137169');
+  const handleData = snap => {
+    if (snap.val()) setCourseInfo(snap.val());
+  };
+  cdb.on('value', handleData, error =>(error));
+  return () => { db.off('value', handleData);};
+}, []);
+
+// makes rows for our datagrid
+const rows = [];
+
+// need to push rows with the data we need
+// the folllowing code is an artifact of a failed attempt T_T
+course.values(this.props.a).map((item,idx) => {
+  rows.push({ id: item.users[`${users.idx}`], 
+              assignment_name: item.assignment_name,
+              score: item.users[`${users.idx}`].score,
+              states: ''
+            })
+  })
 
 const CourseScreen = ({route,navigation}) => {
+
+  const ref = firebase.database().ref('/course/137169/Assignments/0')
+  console.log(ref)
+
 
     const classes = useStyles();
 
@@ -104,7 +97,7 @@ const CourseScreen = ({route,navigation}) => {
         <Grid className={classes.root} container direction="row"
         justify="center"
         alignItems="top">
-            <RankCard score={getScore(rows, rowWeight, keys, 0)} type={'Personal'}/>
+            <RankCard score={getScoree(rows, rowWeight, keys, 0)} type={'Personal'}/>
             <RankCard score={90} type={'Class'}/>
             <View style={{width: '100%', alignItems: 'center'}}>
               <Typography>Class Performance</Typography>
