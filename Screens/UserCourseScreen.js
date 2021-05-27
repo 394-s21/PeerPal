@@ -14,6 +14,10 @@ import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button';
 import ClassSelect from '../components/ClassSelect'
 import useFetch from '../components/useFetch';
+import { firebase } from '../components/firebase';
+
+// make firebase database object from users
+const db = firebase.database().ref('user');
 
 
 const useStyles = makeStyles((theme) => ({
