@@ -27,25 +27,26 @@ const columns = [
     { field: 'strats', headerName: 'Learning Strategies', width: 150, sortable: false },
 ];
 
-const update_rows = () => {
+var rows = [];
+
+const update_rows = (courseInfo) => {
     // initializes rows for our datagrid
     // finds all the users that will be our rows
-    const rows = [];
-    const course_users = [];
+    var course_users = [];
     Object.values(courseInfo.enrollemnt_scores).map((user_id) => {
     course_users.push(user_id)
     })
     setCourseUsers(course_users)
+    rows = []
     // adds all important data to the rows
     Object.entries(courseInfo.assignments).map((assignment, i) => {
     rows.push({ id: course_users[i],
                 assignment_name: assignment.assignment_name,
                 score: '',
                 points_possible: assignment.points_possible,
-                stats: ''
+                strats: ''
                 })
     })
-    setRows(rows)
 }
 
 const UserCourseTable = ({route,navigation}) => {
@@ -53,14 +54,12 @@ const UserCourseTable = ({route,navigation}) => {
     const classes = useStyles();
 
     // updates courseInfo state with firebase json and updates rows
-    const [rows, setRows] = useState([])
-    const [courseUsers, setCourseUsers] = useState([])
     const [courseInfo, setCourseInfo] = useState({})
     useEffect(() => {
     const cdb = firebase.database().ref('course/137169/');
     const handleData = snap => {
         if (snap.val()) {setCourseInfo(snap.val());
-                        update_rows();};
+                        update_rows(courseInfo);};
     };
     cdb.on('value', handleData, error =>(error));
     return () => { db.off('value', handleData);};

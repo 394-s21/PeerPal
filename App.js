@@ -23,10 +23,10 @@ export default function App() {
       {/* <Stack.Screen name="UserScreen"
         component={UserScreen}
       /> */}
-      <Stack.Screen name = "SignIn" component={SignIn} />
+      {/* <Stack.Screen name = "SignIn" component={SignIn} />
       <Stack.Screen name="UserCourseScreen"
         component={UserCourseScreen}
-      />
+      /> */}
       <Stack.Screen name="CourseScreen"
         component={CourseScreen}
       />
