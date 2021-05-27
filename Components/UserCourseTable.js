@@ -40,7 +40,7 @@ const update_rows = () => {
     Object.entries(courseInfo.assignments).map((assignment, i) => {
     rows.push({ id: course_users[i],
                 assignment_name: assignment.assignment_name,
-                score: assignment.users.course_users[i].score,
+                score: '',
                 points_possible: assignment.points_possible,
                 stats: ''
                 })
