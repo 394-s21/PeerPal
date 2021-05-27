@@ -44,7 +44,7 @@ const ClassRechart = ({route,navigation}) => {
     // updates courseInfo state with firebase json and updates rows
     const [courseInfo, setCourseInfo] = useState({})
     useEffect(() => {
-    const cdb = firebase.database().ref('course/137169/');
+    const cdb = firebase.database().ref('course/137169');
     const handleData = snap => {
         if (snap.val()) {setCourseInfo(snap.val());
                         update_data();};

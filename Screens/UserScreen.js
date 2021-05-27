@@ -12,7 +12,7 @@ import Table from '@material-ui/core/Table'
 import { DataGrid } from '@material-ui/data-grid'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button';
-import { firebase } from '../components/firebase';
+import { firebase } from '../Components/firebase';
 import base64 from 'react-native-base64'
 
 

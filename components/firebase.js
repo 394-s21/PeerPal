@@ -15,8 +15,10 @@ const firebaseConfig = {
 
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
+  console.log('initializes new firebase')
 }else {
   firebase.app(); // if already initialized, use that one
+  console.log('using diff firebase app')
 }
 
 export { firebase };

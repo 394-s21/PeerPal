@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { DataGrid } from '@material-ui/data-grid';
 import { firebase } from './firebase';
+import { SettingsCellSharp } from '@material-ui/icons';
 
 const useStyles = makeStyles({
     root: {
@@ -27,7 +28,7 @@ const columns = [
     { field: 'strats', headerName: 'Learning Strategies', width: 150, sortable: false },
 ];
 
-var rows = [];
+const rows = [];
 
 const update_rows = (courseInfo) => {
     // initializes rows for our datagrid
@@ -36,13 +37,12 @@ const update_rows = (courseInfo) => {
     Object.values(courseInfo.enrollemnt_scores).map((user_id) => {
     course_users.push(user_id)
     })
-    setCourseUsers(course_users)
     rows = []
     // adds all important data to the rows
-    Object.entries(courseInfo.assignments).map((assignment, i) => {
-    rows.push({ id: course_users[i],
+    Object.entries(courseInfo.assignments).map((assignment) => {
+    rows.push({ id: course_users[0],
                 assignment_name: assignment.assignment_name,
-                score: '',
+                score: assignment.users.course_users[0].score,
                 points_possible: assignment.points_possible,
                 strats: ''
                 })
@@ -56,14 +56,21 @@ const UserCourseTable = ({route,navigation}) => {
     // updates courseInfo state with firebase json and updates rows
     const [courseInfo, setCourseInfo] = useState({})
     useEffect(() => {
-    const cdb = firebase.database().ref('course/137169/');
-    const handleData = snap => {
-        if (snap.val()) {setCourseInfo(snap.val());
-                        update_rows(courseInfo);};
+        const cdb = firebase.database().ref('course/137169');
+        console.log(cdb.key)
+        const handleData = snap => {
+            if (snap.val()) {setCourseInfo(snap.val());};
+                            // update_rows(courseInfo);}
     };
-    cdb.on('value', handleData, error =>(error));
+    cdb.on('value', snap => {
+        if (snap.val()) {
+            setCourseInfo(snap.val());
+            console.log(courseInfo)
+        }
+    }, error => console.log(error));
     return () => { db.off('value', handleData);};
     }, []);
+    
 
     return (
         <DataGrid rows={rows} columns={columns} pageSize={6}/>
