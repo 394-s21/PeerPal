@@ -62,7 +62,7 @@ export default function SignInSide({route, navigation}) {
   const view_class = () => {
     // var user = firebase.auth().currentUser;
     
-    navigation.navigate('CourseScreen')
+    navigation.navigate('UserCourseScreen')
     
   }
   return (

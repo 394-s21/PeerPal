@@ -5,7 +5,8 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "eject": "expo eject"
+    "eject": "expo eject",
+    "test": "jest"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.4",
@@ -19,21 +20,30 @@
     "expo-status-bar": "~1.0.4",
     "firebase": "8.2.3",
     "firebase-functions": "^3.14.1",
+    "jetifier": "^2.0.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-41.0.0.tar.gz",
     "react-native-base64": "^0.2.1",
-    "react-native-gesture-handler": "~1.10.2",
+    "react-native-gesture-handler": "^1.10.3",
     "react-native-reanimated": "~2.1.0",
     "react-native-responsive-linechart": "^5.7.1",
     "react-native-safe-area-context": "3.2.0",
     "react-native-screens": "~3.0.0",
     "react-native-svg": "^12.1.1",
     "react-native-web": "~0.13.12",
+    "react-test-renderer": "^17.0.2",
     "styled-components": "^5.3.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.9.0"
+    "@babel/core": "^7.9.0",
+    "@testing-library/jest-native": "^4.0.1",
+    "@testing-library/react-native": "^7.2.0",
+    "jest": "^27.0.1"
   },
-  "private": true
+  "private": true,
+  "jest": {
+    "preset": "react-native",
+    "verbose": true
+  }
 }

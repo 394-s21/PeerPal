@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import {View} from 'react-native'
 import { makeStyles } from '@material-ui/core/styles';
+import {Text, View} from "react-native"
 import Card from '@material-ui/core/Card';
 import Grid from '@material-ui/core/Grid'
 import CardActions from '@material-ui/core/CardActions';
@@ -77,26 +77,33 @@ const UserCourseScreen = ({route, navigation}) => {
                 // console.log(result_json[i])
                 }
             setCourseList(courseArray)
+
         }
         fetchClasses()
         }, [])
     
     // [courseList, setCourseList] = useState([])
     // getUserClasses('1876~6TIbmwUY1SkTgGMOSO377QdPMOmsyvMZsqacTeosED9nY7o36B7hP0mYFnbTwPBI')
-    console.log(courseList)
+    // console.log(courseList)
     return(
+      // <View>
+      // <Text> Check </Text>
+      
         <Grid container
         direction="column"
         justify="center"
         alignItems="center"
         spacing={2}>
             {/* {courseList ? <ClassSelect courseList={courseList} /> : <div>Loading . . .</div>} */}
-            <ClassSelect courseList={courseList}/>
+            {courseList.length == 0 ? <Typography>Loading...</Typography>
+            :
+            <ClassSelect courseList={courseList}/>}
             <Button variant="contained" color="primary" onClick={() => view_class() }>
                     GO
             </Button>
+            <div>Test</div>
         </Grid>
-
+        // </View>
     );
 }
 

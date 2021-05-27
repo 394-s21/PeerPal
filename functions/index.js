@@ -206,7 +206,6 @@ exports.updateClasses = functions.https.onRequest(async (req, res) => {
                 assignment_ref.update({
                     assignment_name: assignment_json.name,
                     points_possible: assignment_json.points_possible,
-                    users: {}
                 })})
         });
 
@@ -235,7 +234,7 @@ exports.updateClasses = functions.https.onRequest(async (req, res) => {
         })
 
         // 4. For each class, get enrollment_score, set enrollment_score in database
-        res.send(scores_list)
+        res.send(current_classes_json)
         
     });
 });

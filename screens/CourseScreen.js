@@ -53,31 +53,33 @@ const columns = [
   { field: 'strats', headerName: 'Learning Strategies', width: 150, sortable: false },
 ];
 
-// updates courseInfo state with firebase json
-[courseInfo, setCourseInfo] = useState({})
-useEffect(() => {
-  const cdb = firebase.database().ref('course/137169');
-  const handleData = snap => {
-    if (snap.val()) setCourseInfo(snap.val());
-  };
-  cdb.on('value', handleData, error =>(error));
-  return () => { db.off('value', handleData);};
-}, []);
 
-// makes rows for our datagrid
-const rows = [];
-
-// need to push rows with the data we need
-// the folllowing code is an artifact of a failed attempt T_T
-course.values(this.props.a).map((item,idx) => {
-  rows.push({ id: item.users[`${users.idx}`], 
-              assignment_name: item.assignment_name,
-              score: item.users[`${users.idx}`].score,
-              states: ''
-            })
-  })
 
 const CourseScreen = ({route,navigation}) => {
+
+  // updates courseInfo state with firebase json
+  const [courseInfo, setCourseInfo] = useState({})
+  useEffect(() => {
+    const cdb = firebase.database().ref('course/137169');
+    const handleData = snap => {
+      if (snap.val()) setCourseInfo(snap.val());
+    };
+    cdb.on('value', handleData, error =>(error));
+    return () => { db.off('value', handleData);};
+  }, []);
+
+  // makes rows for our datagrid
+  const rows = [];
+
+  // need to push rows with the data we need
+  // the folllowing code is an artifact of a failed attempt T_T
+  // course.values(this.props.a).map((item,idx) => {
+  //   rows.push({ id: item.users[`${users.idx}`], 
+  //               assignment_name: item.assignment_name,
+  //               score: item.users[`${users.idx}`].score,
+  //               states: ''
+  //             })
+  //   })
 
   const ref = firebase.database().ref('/course/137169/Assignments/0')
   console.log(ref)
@@ -97,7 +99,7 @@ const CourseScreen = ({route,navigation}) => {
         <Grid className={classes.root} container direction="row"
         justify="center"
         alignItems="top">
-            <RankCard score={getScoree(rows, rowWeight, keys, 0)} type={'Personal'}/>
+            <RankCard score={getScore(rows, rowWeight, keys, 0)} type={'Personal'}/>
             <RankCard score={90} type={'Class'}/>
             <View style={{width: '100%', alignItems: 'center'}}>
               <Typography>Class Performance</Typography>
