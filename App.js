@@ -6,7 +6,7 @@ import UserScreen from './Screens/UserScreen'
 import UserCourseScreen from './Screens/UserCourseScreen'
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-
+import  SignIn  from './Screens/SignIn'
 const Stack = createStackNavigator();
 
 export default function App() {
@@ -23,6 +23,7 @@ export default function App() {
       {/* <Stack.Screen name="UserScreen"
         component={UserScreen}
       /> */}
+      <Stack.Screen name = "SignIn" component={SignIn} />
       <Stack.Screen name="UserCourseScreen"
         component={UserCourseScreen}
       />
