@@ -1,35 +1,115 @@
+import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import CourseScreen from './screens/CourseScreen'
-import UserScreen from './Screens/UserScreen'
-import UserCourseScreen from './Screens/UserCourseScreen'
+import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import  SignIn  from './Screens/SignIn'
+import fire from './fire'
+import LoginScreen from './Screens/LoginScreen'
+import HomeScreen from './Screens/HomeScreen'
+
 const Stack = createStackNavigator();
 
 export default function App() {
-  return (
-    // <View style={styles.container}>
-    //   {/* <CourseScreen/> */}
-    //   <UserScreen/>
-    //   <StatusBar style="auto" />
-    // </View>
+  // authentication states
+  const [user, setUser] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [hasAccount, setHasAccount] = useState(false);
 
+  const clearInputs = () => {
+    setEmail('');
+    setPassword('');
+  }
+
+  const clearErrors = () => {
+    setEmailError('');
+    setPasswordError('');
+  }
+
+  const handleLogin = () => {
+    clearErrors();
+    fire
+        .auth()
+        .signInWithEmailAndPassword(email, password)
+        .catch(err => {
+            // use firebase err code to determine kind of error
+            // and handle it accordingly
+            switch(err.code) {
+                case "auth/invalid-email":
+                case "auth/user-disabled":
+                case "auth/user-not-found":
+                    setEmailError(err.message);
+                    break;
+                case "auth/wrong-password":
+                    setPasswordError(err.message);
+                    break;
+            }
+        })
+  }
+
+  const handleSignup = () => {
+    clearErrors();
+    fire
+        .auth()
+        .createUserWithEmailAndPassword(email, password)
+        .catch(err => {
+            // use firebase err code to determine kind of error
+            // and handle it accordingly
+            switch(err.code) {
+                case "auth/email-already-in-use":
+                case "auth/invalid-email":
+                    setEmailError(err.message);
+                    break;
+                case "auth/weak-password":
+                    setPasswordError(err.message);
+                    break;
+            }
+        })
+  }
+
+  const handleLogout = () => {
+    fire.auth().signOut();
+  }
+
+  const authListener = () => {
+    fire.auth().onAuthStateChanged(user => {
+        if (user) {
+            clearInputs();
+            setUser(user);
+        } else {
+            setUser('');
+        }
+    })
+  }
+
+  useEffect(() => {
+    authListener();
+  }, [])
+
+  console.log('user', user)
+
+  return (
     <NavigationContainer>
-    {/* Hide navigator header */}
-    <Stack.Navigator screenOptions={{headerShown: false}}> 
-      {/* <Stack.Screen name="UserScreen"
-        component={UserScreen}
-      /> */}
-      <Stack.Screen name = "SignIn" component={SignIn} />
-      <Stack.Screen name="UserCourseScreen"
-        component={UserCourseScreen}
-      />
-      <Stack.Screen name="CourseScreen"
-        component={CourseScreen}
-      />
+    <Stack.Navigator initialRouteName={ user ? "Home" : "Home" /* Should be Login but I can't figure out how to navigate. */ } screenOptions={{headerShown: false}}>
+
+      <Stack.Screen name="Login">{props => 
+        <LoginScreen
+          email={email}
+          setEmail={setEmail}
+          password={password}
+          setPassword={setPassword}
+          handleLogin={handleLogin}
+          handleSignup={handleSignup}
+          hasAccount={hasAccount}
+          setHasAccount={setHasAccount}
+          emailError={emailError}
+          passwordError={passwordError} />}
+       </Stack.Screen>
+
+      <Stack.Screen name="Home" component={HomeScreen}></Stack.Screen>
+
     </Stack.Navigator>
     </NavigationContainer>
   );
