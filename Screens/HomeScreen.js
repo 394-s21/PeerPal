@@ -12,7 +12,7 @@ const HomeScreen = (route, navigation) => {
     }, [])
 
     return (
-        
+        <Typography>Hello World!</Typography>
     )
 }
 

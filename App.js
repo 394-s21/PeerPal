@@ -6,6 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import fire from './fire'
 import LoginScreen from './Screens/LoginScreen'
 import HomeScreen from './Screens/HomeScreen'
+import CourseScreen from './Screens/CourseScreen'
 
 const Stack = createStackNavigator();
 
@@ -92,7 +93,7 @@ export default function App() {
 
   return (
     <NavigationContainer>
-    <Stack.Navigator initialRouteName={ user ? "Home" : "Home" /* Should be Login but I can't figure out how to navigate. */ } screenOptions={{headerShown: false}}>
+    <Stack.Navigator initialRouteName={ user ? "Course" : "Course" /* Should be "Home" : "Login" but I can't figure out how to navigate. */ } screenOptions={{headerShown: false}}>
 
       <Stack.Screen name="Login">{props => 
         <LoginScreen
@@ -109,6 +110,8 @@ export default function App() {
        </Stack.Screen>
 
       <Stack.Screen name="Home" component={HomeScreen}></Stack.Screen>
+
+      <Stack.Screen name="Course" component={CourseScreen}></Stack.Screen>
 
     </Stack.Navigator>
     </NavigationContainer>
