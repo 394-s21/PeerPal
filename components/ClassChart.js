@@ -49,7 +49,7 @@ const ClassChart = (props) => {
         <Area theme={{ gradient: { from: { color: '#44bd32', opacity: 0.4 }, to: { color: '#44bd32', opacity: 0.2 } }}} data={user_assignments} />
         {
             other_users.map((user, idx) => {
-                <Line theme={{ stroke: { color: '#40a992', width: 2 }, scatter: { default: { width: 8, height: 8, rx: 4, color: '#40a992' }, selected: { color: 'red' } } }}  data={user} nothing={console.log('user', user)}/>
+                <Line theme={{ stroke: { color: '#40a992', width: 2 }, scatter: { default: { width: 8, height: 8, rx: 4, color: '#40a992' }, selected: { color: 'red' } } }}  data={user} />
             })
         }
         
