@@ -24,130 +24,25 @@ const db = admin.database();
 
 exports.getClasses = functions.https.onRequest(async (req, res) => {
     cors()(req, res, async () => {
+        const per_page = 100;
         const authorization = req.headers.authorization;
-        const per_page = 1000; 
         const key = authorization.replace("Bearer ", "");
-        const result = await fetch(`https://canvas.northwestern.edu/api/v1/courses/?per_page=${per_page}`, {
+        const courses = await fetch(`https://canvas.northwestern.edu/api/v1/courses/?per_page=${per_page}`, {
             headers: {
                 authorization: `Bearer ${key}`
             }
         })
-        const result_json = await result.json();
+        const courses_json = await courses.json();
         //need to filter out the current classes
-        const currentClasses = result_json.filter(i => {
-            // console.log(i.end_at)
+        const current_classes_json = courses_json.filter(i => {
             return i.end_at === "2021-06-26T05:00:00Z"
         })
-
-
-        const user_id = result_json[0].enrollments[0].user_id;
-        const updateClass = async (user_key, user_id, curr_class /* class id */) => {
-            let checkQuiz = true
-            let checkAssignment = true
-            let assignment_grades_promises = []
-            let quiz_grades_promises = []
-
-            const assignments = await fetch(`https://canvas.northwestern.edu/api/v1/courses/${curr_class}/assignments?per_page=${per_page}`, {
-                headers: {
-                    authorization: `Bearer ${user_key}`
-                }
-            })
-            const assignments_json = await assignments.json();
-            // Check assignments
-            if (assignments_json.message){
-                checkAssignment = false
-            }
-            const quizzes = await fetch(`https://canvas.northwestern.edu/api/v1/courses/${curr_class}/quizzes?per_page=${per_page}`, {
-                headers: {
-                    authorization: `Bearer ${user_key}`
-                }
-            })
-            const quizzes_json = await quizzes.json();
-            // Check if quizzes are disabled
-            if (quizzes_json.message){
-                checkQuiz = false
-                // console.log("Check if quiz is disabled", checkQuiz)
-            }
-            // console.log("Quizzes: ", quizzes_json)
-            if (checkAssignment){
-                assignments_json.forEach(
-                    assignment => {
-                        assignment_grades_promises.push(
-                            fetch(`https://canvas.northwestern.edu/api/v1/courses/${curr_class}/assignments/${assignment.id}/submissions/${user_id}`, {
-                                headers: {
-                                    authorization: `Bearer ${user_key}`
-                                }
-                            })
-                        )
-                    }
-                )
-                // console.log(assignment_grades_promises)
-            }
-            if (checkQuiz){
-                quizzes_json.forEach(
-                    quiz => {
-                        quiz_grades_promises.push(
-                            // quiz.id might not work
-                            fetch(`https://canvas.northwestern.edu/api/v1/courses/${curr_class}/quizzes/${quiz.id}/submission`, {
-                                headers: {
-                                    authorization: `Bearer ${user_key}`
-                                }
-                            })
-                        )
-                    }
-                )
-            }
-
-            // Resolve promises
-            let assignmentList = []
-            if (checkAssignment){
-                // let assignmentsPoints = []
-                for (i=0; i<assignment_grades_promises.length; i++ ){
-                    const assignment = await assignment_grades_promises[i]
-                    const assignment_json = await assignment.json()
-                    // console.log("assignment", assignment_json)
-                    // assignmentsPoints.push(assignments_json[i].points_possible)
-                    assignment_json.score ? assignmentList.push({id: assignments_json[i].id, points_possible: assignments_json[i].points_possible, score: assignment_json.score, name: assignments_json[i].name})
-                    :
-                    assignmentList.push({id: assignments_json[i].id, points_possible: assignments_json[i].points_possible, score: null, name: assignments_json[i].name})
-                    // console.log("points possible", assignment_json)
-                }
-                // console.log(curr_class + '\n\n\n\n')
-                const courseRef = db.ref('/course/' + curr_class);
-                    // console.log("orderRef",orderRef)
-                    courseRef.update({
-                        Assignments: [assignmentList] 
-                });
-            }
-            // Resolve quiz promises
-            // let quizList = []
-            // if (checkQuiz){
-            //     // let assignmentsPoints = []
-            //     for (i=0; i<quiz_grades_promises.length; i++ ){
-            //         const quiz = await quiz_grades_promises[i]
-            //         const quiz_json = await assignment.json()
-            //         console.log("quiz", quiz_json)
-            //         // assignmentsPoints.push(assignments_json[i].points_possible)
-            //         quiz_json.score ? quizList.push({id: quizzes_json[i].id, points_possible: quizzes_json[i].points_possible, score: quiz_json.score})
-            //         :
-            //         quizList.push({id: quizzes_json[i].id, points_possible: quizzes_json[i].points_possible, score: null})
-            //         console.log("points possible", assignment_json)
-            //     }
-            //     console.log(curr_class + '\n\n\n\n')
-            //     const courseRef = db.ref('/course/' + curr_class);
-            //         // console.log("orderRef",orderRef)
-            //         courseRef.update({
-            //             Quizzes: quizList
-            //     });
-            // }
-        }
-        // for (i = 0; i < currentClasses.length; i++) {
-        //     console.log(currentClasses.length)
-        //     console.log("hello")
-        //     await updateClass(key, user_id, currentClasses[i].id)
-        // }
-        currentClasses.forEach(async eachClass => await updateClass(key, user_id, eachClass.id))
-        res.send(currentClasses);
+        const user_id = current_classes_json[0].enrollments[0].user_id;
+        let courses_res = []
+        current_classes_json.map((course) => {
+            courses_res.push({name: course.name, id: course.id})
+        })
+        res.send(courses_res)
     });
 })
 
