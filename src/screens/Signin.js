@@ -82,9 +82,16 @@ export default function SignInSide(props) {
           <Avatar className={classes.avatar}>
             <LockOutlinedIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign in
-          </Typography>
+          { hasAccount ? (
+            <Typography component="h1" variant="h5">
+              Sign in
+            </Typography>
+              ) : (
+            <Typography component="h1" variant="h5">
+              Sign up
+            </Typography>
+          )}
+
           <form className={classes.form} noValidate>
             <TextField
               variant="outlined"
@@ -111,7 +118,11 @@ export default function SignInSide(props) {
               onChange={(e) => { setPassword(e.target.value) }}
               onKeyPress={(e) => {
                 if (e.key === 'Enter') {
-                  handleLogin();
+                  if (hasAccount) {
+                    handleLogin();
+                  } else {
+                    handleSignup();
+                  }
                 }
               }}
             />
@@ -119,16 +130,27 @@ export default function SignInSide(props) {
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             /> */}
-            <Button
+            { hasAccount ? (
+              <Button
               // type="submit"
               fullWidth
               variant="contained"
               color="primary"
               className={classes.submit}
-              onClick={() => handleLogin() }
-            >
-              Sign In
-            </Button>
+              onClick={() => handleLogin() }>
+                Sign In
+              </Button>
+            ) : (
+              <Button
+              // type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+              onClick={() => handleSignup() }>
+                Sign Up
+              </Button>
+            )}
             <Grid container>
               <Grid item xs>
                 <Link href="#" variant="body2">
@@ -136,9 +158,11 @@ export default function SignInSide(props) {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="/signup" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
+                { hasAccount ? (
+                  <Link variant="body2" onClick={() => setHasAccount(!hasAccount) }>Don't have an account? Sign up</Link>
+                ) : (
+                  <Link variant="body2" onClick={() => setHasAccount(!hasAccount) }>Already have an account? Sign in</Link>
+                )}
               </Grid>
             </Grid>
             <Box mt={5}>

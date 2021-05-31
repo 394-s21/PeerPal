@@ -3,7 +3,6 @@ import fire from './config/fire'
 import './App.css';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'; 
 import Signin from './screens/Signin'; 
-import Signup from './screens/Signup'
 import Home from './screens/Home';
 import Settings from './screens/Settings'
 
@@ -93,36 +92,20 @@ function App() {
       <div className = "App">
         <Switch>
           { (user === '') ? (
-            <>
-              <Route exact path = "/">
-                <Signin
-                  email={email}
-                  setEmail={setEmail}
-                  password={password}
-                  setPassword={setPassword}
-                  handleLogin={handleLogin}
-                  handleSignup={handleSignup}
-                  hasAccount={hasAccount}
-                  setHasAccount={setHasAccount}
-                  emailError={emailError}
-                  passwordError={passwordError}
-                />
-              </Route>
-              <Route exact path = "/signup">
-                <Signup
-                  email={email}
-                  setEmail={setEmail}
-                  password={password}
-                  setPassword={setPassword}
-                  handleLogin={handleLogin}
-                  handleSignup={handleSignup}
-                  hasAccount={hasAccount}
-                  setHasAccount={setHasAccount}
-                  emailError={emailError}
-                  passwordError={passwordError}
-                />
-              </Route>
-            </>
+            <Route exact path = "/">
+              <Signin
+                email={email}
+                setEmail={setEmail}
+                password={password}
+                setPassword={setPassword}
+                handleLogin={handleLogin}
+                handleSignup={handleSignup}
+                hasAccount={hasAccount}
+                setHasAccount={setHasAccount}
+                emailError={emailError}
+                passwordError={passwordError}
+              />
+            </Route>
           ) : (
             <Route exact path = "/">
               <Home/>
