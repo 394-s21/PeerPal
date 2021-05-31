@@ -1,6 +1,5 @@
 import {useState, useEffect} from 'react'; 
 import CourseCard from '../components/CourseCard';
-import CourseCards from '../components/CourseCards';
 import fire from '../config/fire'
 
 const db = fire.database().ref("/course"); 
@@ -32,21 +31,28 @@ const Home = () => {
         // })
     }, [])
     console.log(courses)
-    const render = (() => {
-        if(courses.length){
-            return courses.map((course) => {
-                // <h1>hello</h1>
-                <CourseCard name={course.name} id={course.id} />
-            })
-        }
-        else{
-            return null 
-        }
-    })
+    // const render = (() => {
+    //     if(courses.length){
+    //         return courses.map((course) => {
+    //             // <h1>hello</h1>
+    //             <CourseCard name={course.name} id={course.id} />
+    //         })
+    //     }
+    //     else{
+    //         return null 
+    //     }
+    // })
     return ( 
         <div className="home">
-            <CourseCard name = "ehwqihe" id = "e123"></CourseCard>
-            {render}
+            {courses.length>0 ? (
+                <div>
+                    <CourseCard  name={courses[0].name} id={courses[0].id} />
+                    <CourseCard  name={courses[1].name} id={courses[1].id} />
+                    <CourseCard  name={courses[2].name} id={courses[2].id} />
+                    <CourseCard  name={courses[3].name} id={courses[3].id} />
+                </div>
+            )
+            : (<p>Loading...</p>)}
         </div>
      );
 }
