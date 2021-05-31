@@ -18,7 +18,7 @@ function Copyright() {
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
       <Link color="inherit" href="https://material-ui.com/">
-        Your Website
+        PeerPal
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -109,18 +109,23 @@ export default function SignInSide(props) {
               id="password"
               autoComplete="current-password"
               onChange={(e) => { setPassword(e.target.value) }}
+              onKeyPress={(e) => {
+                if (e.key === 'Enter') {
+                  handleLogin();
+                }
+              }}
             />
             {/* <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             /> */}
             <Button
-              type="submit"
+              // type="submit"
               fullWidth
               variant="contained"
               color="primary"
               className={classes.submit}
-              // onClick={ handleLogin() }
+              onClick={() => handleLogin() }
             >
               Sign In
             </Button>

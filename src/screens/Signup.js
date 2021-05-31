@@ -109,18 +109,23 @@ export default function SignUpSide(props) {
               id="password"
               autoComplete="current-password"
               onChange={(e) => { setPassword(e.target.value) }}
+              onKeyPress={(e) => {
+                if (e.key === 'Enter') {
+                  handleLogin();
+                }
+              }}
             />
             {/* <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             /> */}
             <Button
-              type="submit"
+              // type="submit"
               fullWidth
               variant="contained"
               color="primary"
               className={classes.submit}
-              // onClick={ handleSignup() }
+              onClick={() => handleSignup() }
             >
               Sign Up
             </Button>

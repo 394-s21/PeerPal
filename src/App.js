@@ -70,6 +70,7 @@ function App() {
 
   const handleLogout = () => {
     fire.auth().signOut();
+    window.location.href = '/'
   }
 
   const authListener = () => {
