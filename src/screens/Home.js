@@ -1,8 +1,8 @@
 import {useState, useEffect} from 'react'; 
-import CourseCards from './CourseCards';
-import { firebase } from '../firebase'; 
+import CourseCards from '../components/CourseCards';
+import fire from '../config/fire'
 
-const db = firebase.database().ref("/course"); 
+const db = fire.database().ref("/course"); 
 
 const Home = () => {
     const [courses, setCourses] = useState({})
