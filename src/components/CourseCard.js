@@ -1,10 +1,17 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import {Card, CardActionArea, CardActions, CardContent, Button, Typography} from '@material-ui/core';
+import { Link } from "react-router-dom";
+import {Card, CardActionArea, CardActions, CardContent, Button, Typography, Box} from '@material-ui/core';
 
 const useStyles = makeStyles({
     root: {
       maxWidth: 275,
+    },
+    no_underline:{
+      textDecoration: 'none'
+    },
+    box:{
+      height: 100,
     },
     bullet: {
       display: 'inline-block',
@@ -15,24 +22,26 @@ const useStyles = makeStyles({
       fontSize: 14,
     },
     pos: {
-      marginBottom: 12,
+      fontSize: 'inherit',
+      marginBottom: 15,
     },
 });
 
 const CourseCard = ({name, id}) => {
     const classes = useStyles();
-
     return (
-        <Card className = {classes.root}>
+      <Link to = {`/course/${id}`} className = {classes.no_underline}>
+        <Card className = {classes.root} key = {id}>
             <CardContent>
-                <Typography className={classes.title}>
-                    {name}
-                </Typography>
-                <Typography className={classes.pos}>
-                    {id}
-                </Typography>
+              <Typography className={classes.title}>
+                {name}
+              </Typography>
+              <Typography className={classes.pos}>
+                {id}
+              </Typography>
             </CardContent>
-        </Card>
+          </Card>
+      </Link> 
      );
 }
  
