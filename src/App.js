@@ -5,6 +5,7 @@ import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import Signin from './screens/Signin'; 
 import Home from './screens/Home';
 import Settings from './screens/Settings'
+import Course from './screens/Course';
 
 
 
@@ -117,6 +118,9 @@ function App() {
           </Route>
           <Route path="/settings">
             <Settings handleLogout={handleLogout}/>
+          </Route>
+          <Route path="/course/:id">
+            <Course />
           </Route>
         </Switch>
       </div>

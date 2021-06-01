@@ -32,7 +32,7 @@ const Home = () => {
     return ( 
         <div className="home">
             {courses.length > 0 ? (courses.map((course) => (
-                <CourseCard name = {course.name} id = {course.id}></CourseCard>
+                <CourseCard name = {course.name} id = {course.id} key = {course.id}></CourseCard>
             ))) : (<h1>Loading...</h1>)}
         </div>
      );
