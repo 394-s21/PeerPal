@@ -24,7 +24,7 @@ const Course = () => {
                     Object.entries(assignment[1].users).forEach((key_val) => {
                         my_users.push(key_val[0])
                         if (!(key_val[1].score === 'no_score')) {
-                            my_object[key_val[0]] = key_val[1].score
+                            my_object[key_val[0]] = (key_val[1].score / assignment[1].points_possible) * 100
                             // my_object['uv'] = 10
                         } 
                     })
