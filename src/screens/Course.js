@@ -41,7 +41,7 @@ const Course = () => {
         <div>
             {/* <h1>{id}</h1> */}
             <Typography>{assignments.course_name}</Typography> 
-            <ResponsiveContainer width={800} height={300}>
+            {/* <ResponsiveContainer width={800} height={300}> */}
                 <LineChart width={800} height={300} data={data}>
                     <XAxis dataKey="name"/>
                     <YAxis />
@@ -51,7 +51,7 @@ const Course = () => {
                         <Line type="monotone" dataKey={user} stroke="#8884d8"/>
                     ))}
                 </LineChart>
-            </ResponsiveContainer>
+            {/* </ResponsiveContainer> */}
 
         </div>
      );
