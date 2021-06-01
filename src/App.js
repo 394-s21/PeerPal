@@ -6,6 +6,7 @@ import Signin from './screens/Signin';
 import Home from './screens/Home';
 import Settings from './screens/Settings'
 import Course from './screens/Course';
+import NotFound from './screens/NotFound';
 
 
 
@@ -121,6 +122,9 @@ function App() {
           </Route>
           <Route path="/course/:id">
             <Course />
+          </Route>
+          <Route path="*">
+            <NotFound />
           </Route>
         </Switch>
       </div>
