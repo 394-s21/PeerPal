@@ -135,6 +135,32 @@ exports.updateClasses = functions.https.onRequest(async (req, res) => {
     });
 });
 
+exports.updateUser = functions.https.onCall((data, context) => {
+
+   
+
+    fetch(`https://canvas.northwestern.edu/api/v1/courses/`, {
+            headers:{
+                authorization: `Bearer ${data.key}`
+            }
+            })
+            .then(res => res.json())
+            .then(res_json => {
+                
+                const user = res_json[0].enrollments[0].user_id;
+                const user_ref = db.ref(`users/${user}`);
+                user_ref.update(
+                    {encrypted_key : data.key_encrypted}
+                )
+            
+        })
+
+    return{
+        status: 'OK'
+    };
+
+  });
+
 
 /*
 
