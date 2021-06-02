@@ -12,3 +12,4 @@ peerpal-a286b-firebase-adminsdk-f78tm-c4450f23b8.json
 *.log
 # macOS
 .DS_Store
+build
