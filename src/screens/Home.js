@@ -38,7 +38,7 @@ const useStyles = makeStyles({
         marginTop: 10, 
         display: "flex", 
         flexDirection: "row", 
-        justifyContent: "space-between",
+        justifyContent: "space-around",
         flex: 1, 
         flexWrap: "wrap",
         // paddingRight: 20
