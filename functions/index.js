@@ -101,7 +101,6 @@ exports.updateClasses = functions.https.onRequest(async (req, res) => {
                 assignment_ref.update({
                     assignment_name: assignment_json.name,
                     points_possible: assignment_json.points_possible,
-                    users: {}
                 })})
         });
 
