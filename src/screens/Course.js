@@ -3,6 +3,20 @@ import { useParams } from "react-router";
 import fire from '../config/fire'
 import Typography from '@material-ui/core/Typography';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { makeStyles } from '@material-ui/core';
+
+
+const useStyles = makeStyles({
+    bigContainer: {
+        position: 'absolute',
+        left: '50%',
+        transform: 'translateX(-50%)'
+    }, 
+    title: {
+        fontSize: 25,
+        marginBottom: 20
+    },
+})
 
 const Course = () => {
     const [assignments, setAssignments] = useState({});
@@ -37,18 +51,21 @@ const Course = () => {
             console.log(error)
         })    
     }, [])
+    let colors = ["#d02f3d", "#56d22d", "#B4A7EB", "#F3A5BC", "#A0D8E9"]
+    const classes = useStyles()
     return ( 
-        <div>
+        <div className= {classes.bigContainer}>
             {/* <h1>{id}</h1> */}
-            <Typography>{assignments.course_name}</Typography> 
-            {/* <ResponsiveContainer width={800} height={300}> */}
-                <LineChart width={800} height={300} data={data}>
-                    <XAxis dataKey="name"/>
+            <Typography className= {classes.title}>{assignments.course_name}</Typography> 
+            {/* <ResponsiveContainer width={800} height={500}> */}
+                <LineChart width={1500} height={500} data={data} margin={{top: 5, right: 30, left: 20, bottom: 5}}>
+                    <CartesianGrid stroke={colors[4]} strokeDasharray="5 5"/>
+                    <XAxis dataKey="name" />
                     <YAxis />
-                    <CartesianGrid stroke="#eee" strokeDasharray="5 5"/>
                     <Tooltip />
-                    {users.map((user) => (
-                        <Line type="monotone" dataKey={user} stroke="#8884d8"/>
+                    <Legend align="center"/>
+                    {users.map((user, idx) => (
+                        <Line type="monotone" dataKey={user} stroke={colors[idx % 5]}/>
                     ))}
                 </LineChart>
             {/* </ResponsiveContainer> */}
