@@ -1,3 +1,6 @@
+// This is a backup.
+// For current development, use the `main` branch.
+// This branch uses expo instead of create-react-app.
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
