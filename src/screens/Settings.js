@@ -4,7 +4,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import fire from '../config/fire';
 
-const CryptoJS = require("crypto-js");
+// const CryptoJS = require("crypto-js");
 
 
 const useStyles = makeStyles((theme) => ({
