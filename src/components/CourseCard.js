@@ -14,7 +14,7 @@ const useStyles = makeStyles({
     },
 
     box:{
-      height: 100,
+      height: 110,
     },
     bullet: {
       display: 'inline-block',
