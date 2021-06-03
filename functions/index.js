@@ -4,7 +4,7 @@ const fetch = require('node-fetch')
 const functions = require('firebase-functions');
 
 // The Firebase Admin SDK to access Firestore.
-const serviceAccount = require("../.firebase/peerpal-a286b-firebase-adminsdk-f78tm-c4450f23b8.json");
+const serviceAccount = require("./peerpal-a286b-firebase-adminsdk-f78tm-c4450f23b8.json");
 const admin = require('firebase-admin');
 const { user } = require('firebase-functions/lib/providers/auth');
 admin.initializeApp({
