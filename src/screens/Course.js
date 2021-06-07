@@ -33,13 +33,12 @@ const Course = () => {
                 const assignmentArray = Object.entries(test.assignments)
                 let my_data=[];
                 assignmentArray.map(assignment => {
-                    let my_object = {name: assignment[1].assignment_name, short_name: assignment[1].assignment_name.substring(0, 2)} //have to work on the score 
+                    let my_object = {name: assignment[1].assignment_name, short_name: assignment[1].assignment_name.substring(0, 2)} 
                     let my_users = []
                     Object.entries(assignment[1].users).forEach((key_val) => {
                         my_users.push(key_val[0])
                         if (!(key_val[1].score === 'no_score')) {
                             my_object[key_val[0]] = (key_val[1].score / assignment[1].points_possible) * 100
-                            // my_object['uv'] = 10
                         } 
                     })
                     my_data.push(my_object)
@@ -55,9 +54,7 @@ const Course = () => {
     const classes = useStyles()
     return ( 
         <div className= {classes.bigContainer}>
-            {/* <h1>{id}</h1> */}
             <Typography className= {classes.title}>{assignments.course_name}</Typography> 
-            {/* <ResponsiveContainer width={800} height={500}> */}
                 <LineChart width={1500} height={500} data={data} margin={{top: 5, right: 30, left: 20, bottom: 5}}>
                     <CartesianGrid stroke={colors[4]} strokeDasharray="5 5"/>
                     <XAxis dataKey="name" />
@@ -68,8 +65,6 @@ const Course = () => {
                         <Line type="monotone" dataKey={user} stroke={colors[idx % 5]}/>
                     ))}
                 </LineChart>
-            {/* </ResponsiveContainer> */}
-
         </div>
      );
 }

@@ -14,14 +14,6 @@ admin.initializeApp({
 const db = admin.database();
 
 
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//   functions.logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
-
 exports.getClasses = functions.https.onRequest(async (req, res) => {
     cors()(req, res, async () => {
         const per_page = 100;
@@ -70,11 +62,8 @@ exports.updateClasses = functions.https.onRequest(async (req, res) => {
             course_ids.push(course.id);
             course_names.push(course.name);
             const course_ref = db.ref('/course/' + course.id);
-            // let scores = [];
-            // scores[user_id] = {};
             course_ref.update({
                 course_name: course.name,
-                // enrollment_scores: scores,
             })
             const enrollment_score_ref = db.ref('/course/' + course.id + '/enrollemnt_scores/' + user_id)
             enrollment_score_ref.update({
@@ -121,8 +110,7 @@ exports.updateClasses = functions.https.onRequest(async (req, res) => {
             scores.map(score => {
                 const user_assignment_ref = db.ref('/course/' + course_ids[idx] + '/assignments/' + score.assignment_id + '/users/' + user_id);
                 const assignment_score = score.score ? score.score : 'no_score'
-                // console.log(`\n\n\n\n Assignment score: ${assignment_score}`)
-                user_assignment_ref.update({   //update() actually shows the user_id but push() encrypts the user_id 
+                user_assignment_ref.update({ 
                     score: assignment_score
                 })
             })
@@ -161,31 +149,3 @@ exports.updateUser = functions.https.onCall((data, context) => {
   });
 
 
-/*
-
-courses:
-    - course_id: 1
-        - course_name 1
-        - enrollment_scores: 1, 4
-            - user_id: 1
-                - score 4
-                - learning_strategies: // maybe later
-                    - learning_strategy // maybe later
-        - assignments: 2
-            - assignment_id: 2
-                - assignment_name 2
-                - points_possible 2
-                - users: 1, 3
-                    - user_id: 1
-                        - score 3
-                        - learning_strategies:
-                            - learning_strategy
-users:
-    - user_id:
-        - user_uid
-        - courses:
-            - course_id
-
-
-
-*/

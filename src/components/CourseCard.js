@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link } from "react-router-dom";
 import {Card, CardActionArea, CardActions, CardContent, Button, Typography, Box} from '@material-ui/core';
-import { HowToVoteRounded } from '@material-ui/icons';
-
 const useStyles = makeStyles({
     root: {
       maxWidth: 275,
@@ -26,7 +24,6 @@ const useStyles = makeStyles({
     },
     pos: {
       fontSize: 'inherit',
-      // marginBottom: 15,
       columnGap: 10
     },
 });
