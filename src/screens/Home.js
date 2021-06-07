@@ -3,14 +3,12 @@ import CourseCard from '../components/CourseCard';
 import fire from '../config/fire'
 import { makeStyles } from '@material-ui/core/styles';
 import { Typography } from '@material-ui/core';
+import { useHistory } from "react-router-dom"
+import base64 from 'react-native-base64'
 
-const db = fire.database().ref("/course"); 
-const token = "1876~zeAbPlt0suio6fZRlJEjRPYC85jXROLGPmEBszXJChZv3fDeIC5TMD3si6TI3TU8"
-const headers = {
-    headers: {
-        authorization: `Bearer ${token}`
-    }
-}
+const db = fire.database(); 
+
+
 
 const useStyles = makeStyles({
     root: {
@@ -41,7 +39,6 @@ const useStyles = makeStyles({
         justifyContent: "space-around",
         flex: 1, 
         flexWrap: "wrap",
-        // paddingRight: 20
     },
     courseCard: {
         marginRight: 20
@@ -56,22 +53,40 @@ const useStyles = makeStyles({
 const Home = () => {
     const [courses, setCourses] = useState([])
     const classes = useStyles()
-    useEffect(() => {
-        fetch("https://us-central1-peerpal-a286b.cloudfunctions.net/getClasses", headers)  //https://us-central1-peerpal-a286b.cloudfunctions.net/getClasses //http://localhost:5001/peerpal-a286b/us-central1/getClasses
-            .then(data => { 
-                return data.json()    
-            })
-            .then(res => {
-                setCourses(res)
-            })
 
-        // db.on('value', snap => {
-        //     if(snap.val()){
-        //         setCourses(snap.val())
-        //     }
-        // }, error => {
-        //     console.log(error)
-        // })
+    let history = useHistory()
+    var user = fire.auth().currentUser;
+    const uid = user.uid
+    const user_ref = db.ref('/user/' + uid);
+
+
+
+    useEffect(() => {
+        
+
+            user_ref.on('value', snap => {
+                if(snap.val()){
+                    const headers = {
+                        headers: {
+                            authorization: `Bearer ${base64.decode(snap.val().Token)}`
+                        }
+                    }
+                    console.log("Headers: ", headers)
+                    fetch("https://us-central1-peerpal-a286b.cloudfunctions.net/getClasses", headers)  //https://us-central1-peerpal-a286b.cloudfunctions.net/getClasses //http://localhost:5001/peerpal-a286b/us-central1/getClasses
+                    .then(data => { 
+                        return data.json()    
+                    })
+                    .then(res => {
+                        setCourses(res)
+                    }) 
+                }
+                else{
+                    history.push("/settings")
+                }
+            }, error => {
+                console.log(error)
+                history.push("/settings")
+            })  
     }, [])
     return ( 
         <div >

@@ -3,8 +3,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import fire from '../config/fire';
+import base64 from 'react-native-base64'
 
-// const CryptoJS = require("crypto-js");
+const db = fire.database()
+const CryptoJS = require("crypto-js");
 
 
 const useStyles = makeStyles((theme) => ({
@@ -17,12 +19,25 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const encryptToken = (key,encrypt) => {
-   
+  // var ciphertext = CryptoJS.AES.encrypt(key, encrypt).toString();
+  var cipherText = base64.encode(key)
+  console.log("Encrypt:", key, cipherText)
+  return cipherText
 }
 
 
 const updateToken = (key,encrypt) =>{
-    
+  const cipherText = encryptToken(key,encrypt) //JSON.stringify()
+  // var bytes  = CryptoJS.AES.decrypt(cipherText, encrypt);
+  // var decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+  var decryptedData = base64.decode(cipherText)
+  console.log("decrypt: ", decryptedData)
+  var user = fire.auth().currentUser;
+  const uid = user.uid
+  const user_ref = db.ref('/user/' + uid);
+  user_ref.update({
+      Token: cipherText,
+  })
 }
 
 const Settings = (props) => {
