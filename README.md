@@ -15,4 +15,14 @@ For more information about firebase, check out the [website](https://firebase.go
 
  - `/functions/index.js` line 7: Canvas API Key
  - `/functions/index.js` lines 30, 56: End of quarter date
- -
+
+
+
+## How to get a service account key (from Firebase)
+To generate a private key file for your service account:
+
+1. In the Firebase console, open Settings > Service Accounts.
+
+2. Click Generate New Private Key, then confirm by clicking Generate Key.
+
+3. Securely store the JSON file containing the key.
