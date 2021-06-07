@@ -71,7 +71,8 @@ const Home = () => {
                             authorization: `Bearer ${base64.decode(snap.val().Token)}`
                         }
                     }
-                    fetch("https://us-central1-peerpal-a286b.cloudfunctions.net/getClasses", headers)  //https://us-central1-peerpal-a286b.cloudfunctions.net/getClasses //http://localhost:5001/peerpal-a286b/us-central1/getClasses
+                    // fetch("https://us-central1-peerpal-a286b.cloudfunctions.net/getClasses", headers)  //https://us-central1-peerpal-a286b.cloudfunctions.net/getClasses //http://localhost:5001/peerpal-a286b/us-central1/getClasses
+                    fetch("http://localhost:5001/peerpal-a286b/us-central1/getClasses", headers)
                     .then(data => { 
                         return data.json()    
                     })
