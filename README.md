@@ -10,3 +10,9 @@
 
 For more information about create-react-app, check out the [website](https://create-react-app.dev/).
 For more information about firebase, check out the [website](https://firebase.google.com/).
+
+## Things that are currently hardcoded
+
+ - `/functions/index.js` line 7: Canvas API Key
+ - `/functions/index.js` lines 30, 56: End of quarter date
+ -
