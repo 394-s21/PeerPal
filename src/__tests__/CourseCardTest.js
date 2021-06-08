@@ -1,3 +1,4 @@
+
 import renderer from 'react-test-renderer';
 import CourseCard from '../components/CourseCard';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'; 
