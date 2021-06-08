@@ -6,7 +6,7 @@ async function mock_call()
         authorization: `Bearer ${token}`
     }
 }
-    const data = await fetch("https://us-central1-peerpal-a286b.cloudfunctions.net/", headers)  //add updateUser to that endpoint 
+    const data = await fetch("https://us-central1-peerpal-a286b.cloudfunctions.net/updateUsers", headers)  //add updateUser to that endpoint 
     let ret = data
     if (typeof data == 'undefined'){
         ret = false
@@ -15,7 +15,7 @@ async function mock_call()
     return ret;
 }
 
-describe("Fetch Classes from Canvas with Invalid Token", () => {
+describe("Fetches UserID from Canvas Courses Endpoint with Invalid Token", () => {
     it("Returns false if no data can be found from API", async () => {
        global.fetch = jest.fn(() => {
           Promise.resolve();
