@@ -57,6 +57,7 @@ const Home = () => {
     let history = useHistory()
     var user = fire.auth().currentUser;
     const uid = user.uid
+    console.log("UID: ", uid)
     const user_ref = db.ref('/user/' + uid);
 
 
