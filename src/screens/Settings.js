@@ -49,7 +49,7 @@ const Settings = (props) => {
                 <TextField id="standard-basic" label="Encryption Password" onChange = {e => setEncrypt(e.target.value)} />
             </form>
 
-            <Button onClick={() => {updateToken(key, encrypt)}}> Update API Token</Button>
+            <Button onClick={() => {updateToken(key, encrypt)}}>Update API Token</Button>
 
 
             <Button onClick={() => {props.handleLogout()}}>Log out</Button>
